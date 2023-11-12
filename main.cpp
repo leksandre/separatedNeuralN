@@ -1,16 +1,16 @@
-#include <QCoreApplication>
-#include <QDebug>
-#include <QTime>
+//#include <QCoreApplication>
+//#include <QDebug>
+//#include <QTime>
 #include "myneuro.h"
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
+    //QCoreApplication a(argc, argv);
 
     myNeuro *bb = new myNeuro();
 
      //----------------------------------INPUTS----GENERATOR-------------
-        qsrand((QTime::currentTime().second()));
+        //qsrand((QTime::currentTime().second()));
         float *abc = new float[100];
             for(int i=0; i<100;i++)
             {
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
     //--------------------------------NN---------WORKING---------------
         bb->query(abc);
-        qDebug()<<"_________________________________";
+        //qDebug()<<"_________________________________";
         bb->query(cba);
 
         int i=0;
@@ -44,13 +44,13 @@ int main(int argc, char *argv[])
             i++;
         }
 
-        qDebug()<<"___________________RESULT_____________";
+        //qDebug()<<"___________________RESULT_____________";
         bb->query(abc);
-        qDebug()<<"______";
+        //qDebug()<<"______";
         bb->query(cba);
 
 
-        qDebug()<<"_______________THE____END_______________";
+        //qDebug()<<"_______________THE____END_______________";
 
     return a.exec();
 }

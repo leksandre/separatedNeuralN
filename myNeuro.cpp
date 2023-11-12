@@ -1,5 +1,5 @@
 #include "myneuro.h"
-#include <QDebug>
+//#include <QDebug>
 
 myNeuro::myNeuro()
 {
@@ -39,10 +39,10 @@ void myNeuro::feedForwarding(bool ok)
 
     if (!ok)
     {
-        qDebug()<<"Feed Forward: ";
+        //qDebug()<<"Feed Forward: ";
         for(int out =0; out < outputNeurons; out++)
         {
-            qDebug()<<list[nlCount-1].hidden[out];
+          //  qDebug()<<list[nlCount-1].hidden[out];
         }
         return;
     }
@@ -82,9 +82,9 @@ void myNeuro::query(float *in)
 
 void myNeuro::printArray(float *arr, int s)
 {
-    qDebug()<<"__";
+    //qDebug()<<"__";
     for(int inp =0; inp < s; inp++)
     {
-        qDebug()<<arr[inp];
+        //qDebug()<<arr[inp];
     }
 }

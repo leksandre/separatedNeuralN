@@ -2,8 +2,8 @@
 #define MYNEURO_H
 #include <iostream>
 #include <math.h>
-#include <QtGlobal>
-#include <QDebug>
+//#include <QtGlobal>
+//#include <QDebug>
 
 #define learnRate 0.1
 #define randWeight (( ((float)qrand() / (float)RAND_MAX) - 0.5)* pow(out,-0.5))
