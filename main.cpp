@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
     //QCoreApplication a(argc, argv);
 
     myNeuro *bb = new myNeuro();
-
+//myNeuro bb;
      //----------------------------------INPUTS----GENERATOR-------------
         //qsrand((QTime::currentTime().second()));
         float *abc = new float[100];

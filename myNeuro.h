@@ -2,6 +2,7 @@
 #define MYNEURO_H
 #include <iostream>
 #include <math.h>
+//#include <sdk_dev/math.h>
 //#include <QtGlobal>
 //#include <QDebug>
 
