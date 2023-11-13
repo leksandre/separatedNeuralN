@@ -6,7 +6,7 @@
 //#include <QDebug>
 
 #define learnRate 0.1
-#define randWeight (( ((float)qrand() / (float)RAND_MAX) - 0.5)* pow(out,-0.5))
+#define randWeight (( ((float)rand() / (float)RAND_MAX) - 0.5)* pow(out,-0.5))
 class myNeuro
 {
 public:

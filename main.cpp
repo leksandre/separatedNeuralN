@@ -1,7 +1,7 @@
 //#include <QCoreApplication>
 //#include <QDebug>
 //#include <QTime>
-#include "myneuro.h"
+#include "myNeuro.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,13 +14,13 @@ int main(int argc, char *argv[])
         float *abc = new float[100];
             for(int i=0; i<100;i++)
             {
-            abc[i] =(qrand()%98)*0.01+0.01;
+            abc[i] =(rand()%98)*0.01+0.01;
             }
 
         float *cba = new float[100];
             for(int i=0; i<100;i++)
             {
-            cba[i] =(qrand()%98)*0.01+0.01;
+            cba[i] =(rand()%98)*0.01+0.01;
             }
 
     //---------------------------------TARGETS----GENERATOR-------------
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
     //--------------------------------NN---------WORKING---------------
         bb->query(abc);
-        //qDebug()<<"_________________________________";
+        std::cout<<"_________________________________";
         bb->query(cba);
 
         int i=0;
@@ -44,13 +44,15 @@ int main(int argc, char *argv[])
             i++;
         }
 
-        //qDebug()<<"___________________RESULT_____________";
+        std::cout<<"___________________RESULT_____________";
         bb->query(abc);
-        //qDebug()<<"______";
+        std::cout<<"______";
         bb->query(cba);
 
 
-        //qDebug()<<"_______________THE____END_______________";
+        std::cout<<"_______________THE____END_______________";
+       //std::cout<<"_______________THE____END_______________";
 
-    return a.exec();
+    	//return a.exec();
+	return 0;
 }
