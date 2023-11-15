@@ -1,7 +1,7 @@
 //#include <QCoreApplication>
 //#include <QDebug>
 //#include <QTime>
-#include "myNeuro.h"
+#include "myNeuro.cpp"
 
 int main(int argc, char *argv[])
 {
