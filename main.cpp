@@ -6,10 +6,13 @@
 int main(int argc, char *argv[])
 {
     //QCoreApplication a(argc, argv);
+   std::cout<<"_________________________________ start main 0";
 
     myNeuro *bb = new myNeuro();
+//    return 0;
 //myNeuro bb;
      //----------------------------------INPUTS----GENERATOR-------------
+   std::cout<<"_________________________________ start main";
         //qsrand((QTime::currentTime().second()));
         float *abc = new float[100];
             for(int i=0; i<100;i++)

@@ -43,13 +43,41 @@ public:
                matrix = (float**) malloc((in+1)*sizeof(float));
                for(int inp =0; inp < in+1; inp++)
                {
+                   try {
                    matrix[inp] = (float*) malloc(out*sizeof(float));
+                   }
+                   catch (const std::out_of_range& e) {
+                       std::cout << "Out of Range error.1";
+                       std::cerr << e.what();
+                   } catch (const std::exception& e) {
+                           std::cout << "Out of Range error.01";
+                           std::cerr << e.what();
+                   } catch (const std::string& e) {
+                           std::cout << "Out of Range error.10";
+                           //std::cerr << e.what();
+                   } catch (...) {
+                           std::cout << "Out of Range error.11";
+                   }
                }
                for(int inp =0; inp < in+1; inp++)
                {
                    for(int outp =0; outp < out; outp++)
                    {
+                       try {
                        matrix[inp][outp] =  randWeight;
+                       }
+                       catch (const std::out_of_range& e) {
+                           std::cout << "Out of Range error.2";
+                           std::cerr << e.what();
+                       } catch (const std::exception& e) {
+                               std::cout << "Out of Range error.02";
+                               std::cerr << e.what();
+                       } catch (const std::string& e) {
+                               std::cout << "Out of Range error.20";
+                               //std::cerr << e.what();
+                       } catch (...) {
+                               std::cout << "Out of Range error.22";
+                       }
                    }
                }
            }
