@@ -3,7 +3,7 @@
 
 myNeuro::myNeuro()
 {
-   std::cout<<"_________________________________ start myNeuro cpp";
+   std::cout<<"_________________________________ start myNeuro cpp\n";;
     //--------многослойный
     inputNeurons = 100;
     outputNeurons =2;
@@ -19,7 +19,7 @@ myNeuro::myNeuro()
     list[2].setIO(6,3);
     list[3].setIO(3,2);
 
-   std::cout<<"_________________________________ start myNeuro cpp 0";
+//   std::cout<<"_________________________________ start myNeuro cpp 0\n";;
     //--------однослойный---------
 //    inputNeurons = 100;
 //    outputNeurons =2;
@@ -36,14 +36,14 @@ myNeuro::myNeuro()
 
 void myNeuro::feedForwarding(bool ok)
 {
-   std::cout<<"_________________________________ start myNeuro cpp 1";
+//   std::cout<<"_________________________________ start myNeuro cpp 1\n";;
     list[0].makeHidden(inputs);
     for (int i =1; i<nlCount; i++)
         list[i].makeHidden(list[i-1].getHidden());
 
     if (!ok)
     {
-        std::cout<<"Feed Forward: ";
+        std::cout<<"Feed Forward: \n";;
         for(int out =0; out < outputNeurons; out++)
         {
           std::cout<<list[nlCount-1].hidden[out];
@@ -59,7 +59,7 @@ void myNeuro::feedForwarding(bool ok)
 
 void myNeuro::backPropagate()
 {   
-   std::cout<<"_________________________________ start myNeuro cpp 2";
+//   std::cout<<"_________________________________ start myNeuro cpp 2\n";;
     //-------------------------------ERRORS-----CALC---------
     list[nlCount-1].calcOutError(targets);
     for (int i =nlCount-2; i>=0; i--)
@@ -74,7 +74,7 @@ void myNeuro::backPropagate()
 
 void myNeuro::train(float *in, float *targ)
 {
-   std::cout<<"_________________________________ start myNeuro cpp 3";
+//   std::cout<<"_________________________________ start myNeuro cpp 3\n";;
     inputs = in;
     targets = targ;
     feedForwarding(true);
@@ -82,14 +82,14 @@ void myNeuro::train(float *in, float *targ)
 
 void myNeuro::query(float *in)
 {
-   std::cout<<"_________________________________ start myNeuro cpp 4";
+   std::cout<<"_________________________________ start myNeuro cpp 4\n";;
     inputs=in;
     feedForwarding(false);
 }
 
 void myNeuro::printArray(float *arr, int s)
 {
-    std::cout<<"__";
+    std::cout<<"printArray__\n";;
     for(int inp =0; inp < s; inp++)
     {
         std::cout<<arr[inp];

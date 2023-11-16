@@ -38,25 +38,30 @@ public:
            {
                in=inputs;
                out=outputs;
-               hidden = (float*) malloc((out)*sizeof(float));
 
-               matrix = (float**) malloc((in+1)*sizeof(float));
+               std::cout << " in-out " + std::to_string(in) + " - " + std::to_string(out) + " \n ";
+               std::cout << " randWeight " + std::to_string(randWeight) + " \n ";
+
+
+               hidden = (float*) malloc((out)*sizeof(float)*2);
+
+               matrix = (float**) malloc((in+1)*sizeof(float)*2);
                for(int inp =0; inp < in+1; inp++)
                {
                    try {
                    matrix[inp] = (float*) malloc(out*sizeof(float));
                    }
                    catch (const std::out_of_range& e) {
-                       std::cout << "Out of Range error.1";
+                       std::cout << "Out of Range error.1\n";;
                        std::cerr << e.what();
                    } catch (const std::exception& e) {
-                           std::cout << "Out of Range error.01";
+                           std::cout << "Out of Range error.01\n";;
                            std::cerr << e.what();
                    } catch (const std::string& e) {
-                           std::cout << "Out of Range error.10";
+                           std::cout << "Out of Range error.10\n";;
                            //std::cerr << e.what();
                    } catch (...) {
-                           std::cout << "Out of Range error.11";
+                           std::cout << "Out of Range error.11\n";;
                    }
                }
                for(int inp =0; inp < in+1; inp++)
@@ -64,20 +69,22 @@ public:
                    for(int outp =0; outp < out; outp++)
                    {
                        try {
+
                        matrix[inp][outp] =  randWeight;
                        }
                        catch (const std::out_of_range& e) {
-                           std::cout << "Out of Range error.2";
+                           std::cout << "Out of Range error.2\n";;
                            std::cerr << e.what();
                        } catch (const std::exception& e) {
-                               std::cout << "Out of Range error.02";
+                               std::cout << "Out of Range error.02\n";;
                                std::cerr << e.what();
                        } catch (const std::string& e) {
-                               std::cout << "Out of Range error.20";
+                               std::cout << "Out of Range error.20\n";;
                                //std::cerr << e.what();
                        } catch (...) {
-                               std::cout << "Out of Range error.22";
+                               std::cout << "Out of Range error.22\n";;
                        }
+//                       std::cout << " - " + std::to_string(inp) + " - " + std::to_string(outp) + " \n ";
                    }
                }
            }
