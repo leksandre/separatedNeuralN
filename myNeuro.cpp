@@ -20,7 +20,9 @@ myNeuro::myNeuro()
     list[3].setIO(3,2);
 
 //   std::cout<<"_________________________________ start myNeuro cpp 0\n";;
-    //--------однослойный---------
+
+
+    //--------однослойный---------//
 //    inputNeurons = 100;
 //    outputNeurons =2;
 //    nlCount = 2;
