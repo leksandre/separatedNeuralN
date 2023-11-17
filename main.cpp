@@ -6,13 +6,13 @@
 int main(int argc, char *argv[])
 {
     //QCoreApplication a(argc, argv);
-   std::cout<<"_________________________________ start main 0\n";;;
+   std::cout<<"\n_________________________________ start main 0\n";;;
 
     myNeuro *bb = new myNeuro();
 //    return 0;
 //myNeuro bb;
      //----------------------------------INPUTS----GENERATOR-------------
-   std::cout<<"_________________________________ start main\n";;;
+   std::cout<<"\n_________________________________ start main\n";;;
         //qsrand((QTime::currentTime().second()));
         float *abc = new float[100];
             for(int i=0; i<100;i++)
@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
             }
 
     //---------------------------------TARGETS----GENERATOR-------------
-        std::cout<<"________________TARGETS----GENERATOR_________________\n";;
+        std::cout<<"\n________________TARGETS----GENERATOR_________________\n";;
         float *tar1 = new float[2];
         tar1[0] =0.01;
         tar1[1] =0.99;
@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
         tar2[1] =0.01;
 
     //--------------------------------NN---------WORKING---------------
-        std::cout<<"________________WORKING_________________\n";;
+        std::cout<<"\n________________WORKING_________________\n";;
         bb->query(abc);
         bb->query(cba);
 
@@ -48,14 +48,14 @@ int main(int argc, char *argv[])
             i++;
         }
 
-        std::cout<<"___________________RESULT_____________\n";;
+        std::cout<<"\n___________________RESULT_____________\n";;
         bb->query(abc);
         std::cout<<"______\n";;
         bb->query(cba);
 
 
-        std::cout<<"_______________THE____END_______________\n";;
-       //std::cout<<"_______________THE____END_______________\n";;
+        std::cout<<"\n_______________THE____END_______________\n";;
+       //std::cout<<"\n_______________THE____END_______________\n";;
 
     	//return a.exec();
 	return 0;
