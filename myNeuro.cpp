@@ -45,10 +45,15 @@ void myNeuro::feedForwarding(bool ok)
 
     if (!ok)
     {
-        std::cout<<"!ok - Feed Forward: \n";;
+//        std::cout<<std::to_string(outputNeurons)+"!ok - Feed Forward: \n";;
+//        std::cout<<"nlCount:"+std::to_string(nlCount)+"\n";
+//        std::cout<<"total outputNeurons:"+std::to_string(outputNeurons)+"\n";
+
         for(int out =0; out < outputNeurons; out++)
         {
-          std::cout<<list[nlCount-1].hidden[out];
+            std::cout<<"outputNeuron "+std::to_string(out)+":";
+            float outit = list[nlCount-1].hidden[out];
+          std::cout<<std::to_string(outit)+"\n";
         }
         return;
     }
