@@ -43,7 +43,7 @@ public:
                std::cout << " randWeight " + std::to_string(randWeight) + " \n ";
 
 
-               hidden = (float*) malloc((out)*sizeof(float)*2);//*2 malloc fail in counting mem
+               hidden = (float*) malloc((out)*sizeof(float));//*2 malloc fail in counting mem
 
                matrix = (float**) malloc((in+1)*sizeof(float)*2);//*2 malloc fail in counting mem
                for(int inp =0; inp < in+1; inp++)
