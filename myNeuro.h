@@ -22,6 +22,7 @@ public:
            int getInCount(){return in;}
            int getOutCount(){return out;}
            float **getMatrix(){return matrix;}
+           float *getErrorsM(){return errors;}
            void updMatrix(float *enteredVal)
            {
                for(int ou =0; ou < out; ou++)
@@ -142,6 +143,8 @@ public:
 
     void feedForwarding(bool ok);
     void backPropagate();
+    void optimiseWay();
+    void processErrors(int i, bool & startOptimisation, bool showError);
     void train(float *in, float *targ);
     void query(float *in);
     void printArray(float *arr,int s);
@@ -151,7 +154,8 @@ private:
     int inputNeurons;
     int outputNeurons;
     int nlCount;
-
+    float errLimit;
+    float errOptinizationLimit;
     float *inputs;
     float *targets;
 };

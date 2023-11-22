@@ -1,5 +1,8 @@
 #include "myNeuro.h"
 //#include <QDebug>
+//using namespace std;
+
+#define STRING(Value) #Value
 
 myNeuro::myNeuro()
 {
@@ -8,6 +11,8 @@ myNeuro::myNeuro()
     inputNeurons = 100;
     outputNeurons =2;
     nlCount = 4;
+    errLimit = 0.000005;
+    errOptinizationLimit = 0.00003;
     list = (nnLay*) malloc((nlCount)*sizeof(nnLay));
 
     inputs = (float*) malloc((inputNeurons)*sizeof(float));
@@ -43,7 +48,7 @@ void myNeuro::feedForwarding(bool ok)
     for (int i =1; i<nlCount; i++)
         list[i].makeHidden(list[i-1].getHidden());
 
-    if (!ok)
+    if (!ok) // is query mode
     {
 //        std::cout<<std::to_string(outputNeurons)+"!ok - Feed Forward: \n";;
 //        std::cout<<"nlCount:"+std::to_string(nlCount)+"\n";
@@ -57,21 +62,53 @@ void myNeuro::feedForwarding(bool ok)
         }
         return;
     }
-    else
+    else //it is train mode
     {
        // printArray(list[3].getErrors(),list[3].getOutCount());
         backPropagate();
     }
 }
 
-void myNeuro::backPropagate()
+void myNeuro::optimiseWay()
+{
+//    std::cout<<"\n_________________________________ optimiseWay!!!!!!!! \n";
+}
+
+void myNeuro::processErrors(int i, bool & startOptimisation, bool showError)
+{
+    float  err1 = *list[i].getErrorsM();
+    startOptimisation = startOptimisation & (err1<errOptinizationLimit);
+    if (showError)
+        std::cout << ", i:" + std::to_string(i) + " " + std::to_string( err1 ) ;
+}
+
+    void myNeuro::backPropagate()
 {   
-//   std::cout<<"\n_________________________________ start myNeuro cpp backPropagate\n";;
+    //   std::cout<<"\n_________________________________ start myNeuro cpp backPropagate\n";;
     //-------------------------------ERRORS-----CALC---------
+    bool showError = false;
+    bool startOptimisation = true;
+    if(rand()%10000==9){
+        showError = true;
+    }
+
     list[nlCount-1].calcOutError(targets);
-    for (int i =nlCount-2; i>=0; i--)
+
+    processErrors(nlCount-1,startOptimisation,showError);
+
+    for (int i =nlCount-2; i>=0; i--){
         list[i].calcHidError(list[i+1].getErrors(),list[i+1].getMatrix(),
-                list[i+1].getInCount(),list[i+1].getOutCount());
+                             list[i+1].getInCount(),list[i+1].getOutCount());
+
+        processErrors(i,startOptimisation,showError);
+
+    }
+
+    if(showError)std::cout<<"\n";
+
+    if(startOptimisation){
+        optimiseWay();
+    }
 
     //-------------------------------UPD-----WEIGHT---------
     for (int i =nlCount-1; i>0; i--)
