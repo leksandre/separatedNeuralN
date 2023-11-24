@@ -12,6 +12,7 @@ myNeuro::myNeuro()
     outputNeurons =2;
     nlCount = 4;
     errLimit = 0.000005;
+    couldoptimizeM = false;
     errOptinizationLimit = 0.00003;
     list = (nnLay*) malloc((nlCount)*sizeof(nnLay));
 
@@ -48,36 +49,40 @@ void myNeuro::feedForwarding(bool ok)
     for (int i =1; i<nlCount; i++)
         list[i].makeHidden(list[i-1].getHidden());
 
-    if (!ok) // is query mode
+    if (ok)//it is train mode
+    {
+        // printArray(list[3].getErrors(),list[3].getOutCount());
+        backPropagate();// обратн расп ошибки
+    } else // is query mode
     {
 //        std::cout<<std::to_string(outputNeurons)+"!ok - Feed Forward: \n";;
 //        std::cout<<"nlCount:"+std::to_string(nlCount)+"\n";
 //        std::cout<<"total outputNeurons:"+std::to_string(outputNeurons)+"\n";
 
-        for(int out =0; out < outputNeurons; out++)
-        {
-            std::cout<<"outputNeuron "+std::to_string(out)+":";
-            float outit = list[nlCount-1].hidden[out];
-          std::cout<<std::to_string(outit)+"\n";
+        for (int out = 0; out < outputNeurons; out++) {
+            std::cout << "outputNeuron " + std::to_string(out) + ":";
+            float outit = list[nlCount - 1].hidden[out];
+            std::cout << std::to_string(outit) + "\n";
         }
         return;
     }
-    else //it is train mode
-    {
-       // printArray(list[3].getErrors(),list[3].getOutCount());
-        backPropagate();
-    }
+
 }
 
 void myNeuro::optimiseWay()
 {
 //    std::cout<<"\n_________________________________ optimiseWay!!!!!!!! \n";
+    //start it now or later?
+    couldoptimizeM = true;
 }
 
 void myNeuro::processErrors(int i, bool & startOptimisation, bool showError)
 {
     float  err1 = *list[i].getErrorsM();
     startOptimisation = startOptimisation & (err1<errOptinizationLimit);
+    if (list[i].couldoptimizeL != startOptimisation)
+        list[i].couldoptimizeL = startOptimisation;
+
     if (showError)
         std::cout << ", i:" + std::to_string(i) + " " + std::to_string( err1 ) ;
 }

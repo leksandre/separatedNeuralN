@@ -12,10 +12,15 @@ class myNeuro
 {
 public:
     myNeuro();
-	
+
+    bool couldoptimizeM;
+
     struct nnLay{
            int in;
            int out;
+
+            bool couldoptimizeL;
+
            float** matrix;
            float* hidden;
            float* errors;
