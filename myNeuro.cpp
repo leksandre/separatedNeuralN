@@ -1,7 +1,7 @@
 #include "myNeuro.h"
 //#include <QDebug>
 //using namespace std;
-
+#include <typeinfo>
 #define STRING(Value) #Value
 
 myNeuro::myNeuro()
@@ -42,20 +42,20 @@ myNeuro::myNeuro()
 
 }
 
-void myNeuro::feedForwarding(bool ok)
+void myNeuro::feedForwarding(bool mode_train)
 {
 //   std::cout<<"\n_________________________________ start myNeuro cpp feedForwarding\n";
-    list[0].makeHidden(inputs);
+    list[0].toHiddenLayer(inputs);
     for (int i =1; i<nlCount; i++)
-        list[i].makeHidden(list[i-1].getHidden());
+        list[i].toHiddenLayer(list[i-1].getHidden());
 
-    if (ok)//it is train mode
+    if (mode_train)//it is train mode
     {
         // printArray(list[3].getErrors(),list[3].getOutCount());
         backPropagate();// обратн расп ошибки
     } else // is query mode
     {
-//        std::cout<<std::to_string(outputNeurons)+"!ok - Feed Forward: \n";;
+//        std::cout<<std::to_string(outputNeurons)+"!mode_train - Feed Forward: \n";;
 //        std::cout<<"nlCount:"+std::to_string(nlCount)+"\n";
 //        std::cout<<"total outputNeurons:"+std::to_string(outputNeurons)+"\n";
 
@@ -79,12 +79,14 @@ void myNeuro::optimiseWay()
 void myNeuro::processErrors(int i, bool & startOptimisation, bool showError)
 {
     float  err1 = *list[i].getErrorsM();
-    startOptimisation = startOptimisation & (err1<errOptinizationLimit);
-    if (list[i].couldoptimizeL != startOptimisation)
-        list[i].couldoptimizeL = startOptimisation;
+    startOptimisation = startOptimisation & (err1<errOptinizationLimit) & true ; // & (i == 3)
+
+    if (list[i].couldoptimizeL != startOptimisation) list[i].couldoptimizeL = startOptimisation;
 
     if (showError)
-        std::cout << ", i:" + std::to_string(i) + " " + std::to_string( err1 ) ;
+        std::cout << " layer:" + std::to_string(i) + " error:" + std::to_string(err1) + " (" +
+//                "" + std::to_string((startOptimisation) ) + ") (" +
+                     std::to_string(list[i].getInCount()) + ") ";
 }
 
     void myNeuro::backPropagate()
@@ -97,19 +99,29 @@ void myNeuro::processErrors(int i, bool & startOptimisation, bool showError)
         showError = true;
     }
 
-    list[nlCount-1].calcOutError(targets);
+    list[nlCount-1].calcOutError(targets);//for 1 out layer (where 2 output neurons for our case)
 
     processErrors(nlCount-1,startOptimisation,showError);
 
-    for (int i =nlCount-2; i>=0; i--){
+    for (int i =nlCount-2; i>=0; i--){//for everyone over layer
         list[i].calcHidError(list[i+1].getErrors(),list[i+1].getMatrix(),
                              list[i+1].getInCount(),list[i+1].getOutCount());
 
         processErrors(i,startOptimisation,showError);
+        if(showError & couldoptimizeM){
+            std::cout<<"\n";
+            if(list[i].couldoptimizeL )std::cout<<"\n_________________________________\n";
+            std::cout<<" layer:"+std::to_string(i)+" ";
+            printArray(list[i+1].getErrors(),100);
+            if(list[i].couldoptimizeL )std::cout<<"\n_________________________________\n";
+            std::cout<<"\n";
+        }
 
     }
 
-    if(showError)std::cout<<"\n";
+    if(showError) {
+        std::cout<<"\n";
+    }
 
     if(startOptimisation){
         optimiseWay();
@@ -138,9 +150,19 @@ void myNeuro::query(float *in)
 
 void myNeuro::printArray(float *arr, int s)
 {
-    std::cout<<"printArray__\n";;
+//    std::cout<<"printArray__\n";;
     for(int inp =0; inp < s; inp++)
     {
-        std::cout<<arr[inp];
+        std::string type_s;
+        std::string str_f;
+        type_s = typeid(arr[inp]).name();
+        str_f = 'f';
+        if(type_s == str_f) {
+            std::cout<< round(arr[inp]*1000000);
+        }else{
+            std::cout<< (arr[inp]);
+        }
+
+        std::cout<< ',';
     }
 }

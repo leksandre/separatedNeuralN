@@ -2,7 +2,7 @@
 //#include <QDebug>
 //#include <QTime>
 #include "myNeuro.cpp"
-
+int iCycle;
 int main(int argc, char *argv[])
 {
     //QCoreApplication a(argc, argv);
@@ -42,12 +42,12 @@ int main(int argc, char *argv[])
         bb->query(cba);
 
         std::cout<<"\n________________start_train_________________\n";;
-        int i=0;
-        while(i<100000)
+        iCycle = 0;
+        while(iCycle<100000)
         {
             bb->train(abc,tar1);
             bb->train(cba,tar2);
-            i++;
+            iCycle++;
         }
 
         std::cout<<"\n___________________calculate_RESULT_____________\n";;

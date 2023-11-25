@@ -94,7 +94,7 @@ public:
                    }
                }
            }
-           void makeHidden(float *inputs)
+           void toHiddenLayer(float *inputs)
            {
                for(int hid =0; hid < out; hid++)
                {
@@ -146,7 +146,7 @@ public:
            };
     };
 
-    void feedForwarding(bool ok);
+    void feedForwarding(bool mode_train);
     void backPropagate();
     void optimiseWay();
     void processErrors(int i, bool & startOptimisation, bool showError);
