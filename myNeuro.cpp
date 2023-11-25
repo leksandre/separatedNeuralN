@@ -156,10 +156,12 @@ void myNeuro::printArray(float *arr, int iList, int s)
         std::string type_s;
         std::string str_f;
         type_s = typeid(arr[inp]).name();
+        //std::cout<< type_s;
         str_f = 'f';
-        if(type_s == str_f) {
+        if((type_s == str_f | type_s ==  "float")) {
             std::cout<< round(arr[inp]*1000000);
         }else{
+            //std::cout << round(arr[inp] * 1000000);
             std::cout<< (arr[inp]);
         }
 
