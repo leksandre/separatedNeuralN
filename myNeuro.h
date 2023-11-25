@@ -6,6 +6,27 @@
 //#include <QtGlobal>
 //#include <QDebug>
 
+
+
+
+
+//for win!!
+//
+#include <sstream>
+#include <string>
+template<class T>
+std::string toString(const T& value) {
+    std::ostringstream os;
+    os << value;
+    return os.str();
+}
+//
+//for win
+
+
+
+
+
 #define learnRate 0.1
 #define randWeight (( ((float)rand() / (float)RAND_MAX) - 0.5)* pow(out,-0.5))
 class myNeuro

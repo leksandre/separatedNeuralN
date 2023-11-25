@@ -1,8 +1,15 @@
 //#include <QCoreApplication>
 //#include <QDebug>
 //#include <QTime>
-#include "myNeuro.cpp"
-#include <sys/time.h>
+
+
+//for linux
+//#include "myNeuro.cpp"
+//#include <sys/time.h>
+
+//for win!!
+#include "myNeuro.h"
+#include <time.h>
 
 int iCycle;
 int main(int argc, char *argv[])
