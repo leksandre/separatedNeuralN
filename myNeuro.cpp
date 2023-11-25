@@ -158,10 +158,29 @@ void myNeuro::printArray(float *arr, int iList, int s)
         type_s = typeid(arr[inp]).name();
         //std::cout<< type_s;
         str_f = 'f';
-        if((type_s == str_f | type_s ==  "float")) { 
-            std::cout<< round(arr[inp]*1000000);
+        if(type_s == str_f | type_s == "float") {
+
+            int i2 = 0;
+            float N = arr[inp];
+            while (N > 0)
+            {
+                N = N / 10; ++i2;
+            }
+
+            //v0
+            std::cout<< i2;
+
+            //v1
+            //std::cout<< round(arr[inp]*1000000);
+
+
+            //v2
+            //float errSigm = list[iList].sigmoida(arr[inp]);
+            //std::string errSigmS = std::to_string(errSigm);
+            //if (errSigm == 0.5 | errSigmS == "0.5")errSigm = 0;
+            //std::cout << errSigm;
+     
         }else{
-            //std::cout << round(arr[inp] * 1000000);
             std::cout<< (arr[inp]);
         }
 
