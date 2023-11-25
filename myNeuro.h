@@ -152,7 +152,7 @@ public:
     void processErrors(int i, bool & startOptimisation, bool showError);
     void train(float *in, float *targ);
     void query(float *in);
-    void printArray(float *arr,int s);
+    void printArray(float *arr, int iList, int s);
 
 private:
     struct nnLay *list;

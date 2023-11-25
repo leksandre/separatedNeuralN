@@ -112,7 +112,7 @@ void myNeuro::processErrors(int i, bool & startOptimisation, bool showError)
             std::cout<<"\n";
             if(list[i].couldoptimizeL )std::cout<<"\n_________________________________\n";
             std::cout<<" layer:"+std::to_string(i)+" ";
-            printArray(list[i+1].getErrors(),100);
+            printArray(list[i+1].getErrors(),i, 100);
             if(list[i].couldoptimizeL )std::cout<<"\n_________________________________\n";
             std::cout<<"\n";
         }
@@ -148,7 +148,7 @@ void myNeuro::query(float *in)
     feedForwarding(false);
 }
 
-void myNeuro::printArray(float *arr, int s)
+void myNeuro::printArray(float *arr, int iList, int s)
 {
 //    std::cout<<"printArray__\n";;
     for(int inp =0; inp < s; inp++)

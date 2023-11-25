@@ -2,11 +2,15 @@
 //#include <QDebug>
 //#include <QTime>
 #include "myNeuro.cpp"
+#include <sys/time.h>
+
 int iCycle;
 int main(int argc, char *argv[])
 {
     //QCoreApplication a(argc, argv);
 //   std::cout<<"\n_________________________________ start main 0\n";;;
+    time_t start, end;
+    time(&start);
 
     myNeuro *bb = new myNeuro();
 //    return 0;
@@ -60,5 +64,14 @@ int main(int argc, char *argv[])
        //std::cout<<"\n_______________THE____END_______________\n";;
 
     	//return a.exec();
-	return 0;
+
+    time(&end);
+
+    // Calculating total time taken by the program.
+    double time_taken;
+    time_taken = double(end - start);
+    std::cout << "Time taken by program is : " << time_taken << "";
+    std::cout << " sec " << "\n";
+
+    return 0;
 }
