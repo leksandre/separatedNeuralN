@@ -302,16 +302,19 @@ int main(int argc, char *argv[])
         //int nIterations = learning_process();
 
 
-
+       
 
         float* binNumber = new float[n1];
         for (int i = 0; i < n1; i++)
         {
             binNumber[i] =out1[i];
+        
         }
 
+       
+
         float* target = new float[10];
-        target[labelN] = 1.0;
+        target[labelN] = 1;
         bb->train(binNumber, target);
 
 
@@ -331,6 +334,26 @@ int main(int argc, char *argv[])
 
 
     }
+
+
+
+    for (int sample = 1; sample <= nTraining; ++sample) {
+
+        ////cout << "Sample " << sample << endl;
+        //// Getting (image, label)
+        int labelN = input(false);
+        cout << "labelN " << labelN << endl;
+        //// Learning process: Perceptron (Forward procedure) - Back propagation
+        //int nIterations = learning_process();
+
+        float* binNumber = new float[n1];
+        for (int i = 0; i < n1; i++)
+        {
+            binNumber[i] = out1[i];
+        }
+        bb->query(binNumber);
+    }
+
 
     // Save the final network
     write_matrix(model_fn);

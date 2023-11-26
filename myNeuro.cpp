@@ -10,14 +10,22 @@ myNeuro::myNeuro()
     //--------многослойный
     inputNeurons = n1;
     outputNeurons =n3;
-    nlCount = 2;
-    errLimit = 0.000005;
+    
+    nlCount = 4;//укажи сколько слоев используешь а нaвернется
+
+    errLimit = errLimitG;
     couldoptimizeM = false;
-    errOptinizationLimit = 0.00003;
+    errOptinizationLimit = errOptinizationLimitG;
     list = (nnLay*) malloc((nlCount)*sizeof(nnLay));
 
     inputs = (float*) malloc((inputNeurons)*sizeof(float));
     targets = (float*) malloc((outputNeurons)*sizeof(float));
+
+
+
+
+ 
+
 
 //    list[0].setIO(100,20);
 //    list[1].setIO(20,6);
@@ -30,10 +38,10 @@ myNeuro::myNeuro()
     //list[1].setIO(40, n3);
 
 
-//    list[0].setIO(n1,n2);
-//    list[1].setIO(n2,60);
-//    list[2].setIO(60,30);
-//    list[3].setIO(30,n3);
+    //list[0].setIO(n1,n2);
+    //list[1].setIO(n2,60);
+    //list[2].setIO(60,30);
+    //list[3].setIO(30,n3);
 
 
     list[0].setIO(n1, n2);
@@ -111,17 +119,17 @@ void myNeuro::processErrors(int i, bool & startOptimisation, bool showError)
     //-------------------------------ERRORS-----CALC---------
     bool showError = false;
     bool startOptimisation = true;
-    if(rand()%1000==9){
+    if(rand()%10000==9){
         showError = true;
     }
 
-    list[nlCount-1].calcOutError(targets);//for 1 out layer (where 2 output neurons for our case)
+    list[nlCount-1].calcOutError(targets, showError);//for 1 out layer (where 2 output neurons for our case)
 
     processErrors(nlCount-1,startOptimisation,showError);
 
     for (int i =nlCount-2; i>=0; i--){//for everyone over layer
         list[i].calcHidError(list[i+1].getErrors(),list[i+1].getMatrix(),
-                             list[i+1].getInCount(),list[i+1].getOutCount());
+                             list[i+1].getInCount(),list[i+1].getOutCount(), showError);
 
         processErrors(i,startOptimisation,showError);
         if(showError & couldoptimizeM){

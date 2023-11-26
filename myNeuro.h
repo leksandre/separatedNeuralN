@@ -34,7 +34,7 @@ const string model_fn = "model-neural-network.dat";
 const string report_fn = "training-report.dat";
 
 // Number of training samples
-const int nTraining = 60000;//60000;
+const int nTraining = 10000;//60000;
 
 // Image size in MNIST database
 const int width = 28;
@@ -43,7 +43,9 @@ const int n1 = width * height; // = 784, without bias neuron
 const int n2 = 128;
 const int n3 = 10; // Ten classes: 0 - 9
 
+const float errLimitG = 0.000005;
 
+const float errOptinizationLimitG = 0.00003;
 
 //for win!!
 //
@@ -169,15 +171,20 @@ public:
            {
                return hidden;
            };
-           void calcOutError(float *targets)
+           void calcOutError(float *targets, bool & showError )
            {
                errors = (float*) malloc((out)*sizeof(float));
                for(int ou =0; ou < out; ou++)
                {
-                   errors[ou] = (targets[ou] - hidden[ou]) * sigmoidasDerivate(hidden[ou]);
+                   float errTmp = (targets[ou] - hidden[ou]) * sigmoidasDerivate(hidden[ou]);
+
+                  /* if (!isnan(errTmp)) std::cout << " - " + std::to_string(errTmp]) + " - " + std::to_string(out) + " \n ";*/
+
+                   //if (errTmp > errLimitG)showError = true;
+                   errors[ou] = errTmp;
                }
            };
-           void calcHidError(float *targets,float **outWeights,int inS, int outS)
+           void calcHidError(float *targets,float **outWeights,int inS, int outS, bool & showError)
            {
                errors = (float*) malloc((inS)*sizeof(float));
                for(int hid =0; hid < inS; hid++)
@@ -186,7 +193,14 @@ public:
                    for(int ou =0; ou < outS; ou++)
                    {
                        errors[hid] += targets[ou] * outWeights[hid][ou];
+
+                       //if(!isnan(errors[hid])) std::cout << " - " + std::to_string(errors[hid]) + " - " + std::to_string(outS) + " \n ";
+                       
+
                    }
+
+                   //if (errors[hid] > errLimitG)showError = true;
+
                    errors[hid] *= sigmoidasDerivate(hidden[hid]);
                }
            };
