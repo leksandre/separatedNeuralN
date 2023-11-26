@@ -8,9 +8,9 @@ myNeuro::myNeuro()
 {
    std::cout<<"\n_________________________________ start myNeuro cpp\n";;
     //--------многослойный
-    inputNeurons = 100;
-    outputNeurons =2;
-    nlCount = 4;
+    inputNeurons = n1;
+    outputNeurons =n3;
+    nlCount = 2;
     errLimit = 0.000005;
     couldoptimizeM = false;
     errOptinizationLimit = 0.00003;
@@ -19,11 +19,27 @@ myNeuro::myNeuro()
     inputs = (float*) malloc((inputNeurons)*sizeof(float));
     targets = (float*) malloc((outputNeurons)*sizeof(float));
 
-    list[0].setIO(100,20);
-//    return ;
-    list[1].setIO(20,6);
-    list[2].setIO(6,3);
-    list[3].setIO(3,2);
+//    list[0].setIO(100,20);
+//    list[1].setIO(20,6);
+//    list[2].setIO(6,3);
+//    list[3].setIO(3,2);
+
+
+    //list[0].setIO(n1, n2);
+    //list[1].setIO(n2, 40);
+    //list[1].setIO(40, n3);
+
+
+//    list[0].setIO(n1,n2);
+//    list[1].setIO(n2,60);
+//    list[2].setIO(60,30);
+//    list[3].setIO(30,n3);
+
+
+    list[0].setIO(n1, n2);
+    list[1].setIO(n2, n3);
+
+
 
 //   std::cout<<"\n_________________________________ start myNeuro cpp myNeuro\n";;
 
@@ -95,7 +111,7 @@ void myNeuro::processErrors(int i, bool & startOptimisation, bool showError)
     //-------------------------------ERRORS-----CALC---------
     bool showError = false;
     bool startOptimisation = true;
-    if(rand()%10000==9){
+    if(rand()%1000==9){
         showError = true;
     }
 
@@ -109,6 +125,7 @@ void myNeuro::processErrors(int i, bool & startOptimisation, bool showError)
 
         processErrors(i,startOptimisation,showError);
         if(showError & couldoptimizeM){
+        //if (true) {
             std::cout<<"\n";
             if(list[i].couldoptimizeL )std::cout<<"\n_________________________________\n";
             std::cout<<" layer:"+std::to_string(i)+" ";

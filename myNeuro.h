@@ -8,6 +8,41 @@
 
 
 
+#include <fstream>
+#include <cstring>
+#include <string>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
+#include <vector>
+#include <set>
+#include <iterator>
+#include <algorithm>
+
+
+using namespace std;
+// Training image file name
+const string training_image_fn = "mnist/train-images.idx3-ubyte";
+
+// Training label file name
+const string training_label_fn = "mnist/train-labels.idx1-ubyte";
+
+// Weights file name
+const string model_fn = "model-neural-network.dat";
+
+// Report file name
+const string report_fn = "training-report.dat";
+
+// Number of training samples
+const int nTraining = 60000;//60000;
+
+// Image size in MNIST database
+const int width = 28;
+const int height = 28;
+const int n1 = width * height; // = 784, without bias neuron 
+const int n2 = 128;
+const int n3 = 10; // Ten classes: 0 - 9
+
 
 
 //for win!!
@@ -22,6 +57,8 @@ std::string toString(const T& value) {
 }
 //
 //for win
+
+
 
 
 
