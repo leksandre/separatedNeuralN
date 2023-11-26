@@ -179,8 +179,8 @@ public:
                    float errTmp = (targets[ou] - hidden[ou]) * sigmoidasDerivate(hidden[ou]);
 
                   /* if (!isnan(errTmp)) std::cout << " - " + std::to_string(errTmp]) + " - " + std::to_string(out) + " \n ";*/
-
                    //if (errTmp > errLimitG)showError = true;
+
                    errors[ou] = errTmp;
                }
            };

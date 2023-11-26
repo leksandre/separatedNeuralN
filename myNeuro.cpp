@@ -11,7 +11,7 @@ myNeuro::myNeuro()
     inputNeurons = n1;
     outputNeurons =n3;
     
-    nlCount = 4;//укажи сколько слоев используешь а нaвернется
+    nlCount = 2;//укажи сколько слоев используешь а нaвернется
 
     errLimit = errLimitG;
     couldoptimizeM = false;
