@@ -4,11 +4,11 @@
 
 
 //for linux
-//#include "myNeuro.cpp"
+#include "myNeuro.cpp"
 //#include <sys/time.h>
 
 //for win!!
-#include "myNeuro.h"
+//#include "myNeuro.h"
 #include <time.h>
 
 
@@ -259,7 +259,7 @@ void write_matrix(string file_name) {
 }
 
 
-int iCycle;
+
 int main(int argc, char *argv[])
 {
     //QCoreApplication a(argc, argv);
@@ -267,13 +267,14 @@ int main(int argc, char *argv[])
     time_t start, end;
     time(&start);
 
-   
 
+    myNeuro* bb = new myNeuro();
 
 
     if (false) {
+//    if (true) {
 
-        myNeuro* bb = new myNeuro();
+
 
 
         //    return 0;
@@ -319,6 +320,16 @@ int main(int argc, char *argv[])
         tar1[8] = 0;
         tar1[9] = 0;
 
+        std::cout << "\n________________target1_________________\n";;
+        for (int out = 0; out < 10; out++) {
+            std::cout << "outputNeuron " + std::to_string(out) + ":";
+            std::cout << std::to_string(tar1[out]) + "\n";
+        }
+        std::cout << "\n________________target2_________________\n";;
+        for (int out = 0; out < 10; out++) {
+            std::cout << "outputNeuron " + std::to_string(out) + ":";
+            std::cout << std::to_string(tar2[out]) + "\n";
+        }
 
         //--------------------------------NN---------WORKING---------------
 
@@ -328,7 +339,8 @@ int main(int argc, char *argv[])
 
         std::cout << "\n________________start_train_________________\n";;
         iCycle = 0;
-        while (iCycle < nTraining)
+        int nTrainingSimple = 100000;
+        while (iCycle < nTrainingSimple)
         {
             bb->train(abc, tar1);
             bb->train(cba, tar2);
@@ -349,7 +361,7 @@ int main(int argc, char *argv[])
     }
 
 
-    //return 0;
+//    return 0;
 
 
 

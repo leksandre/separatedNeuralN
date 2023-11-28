@@ -4,17 +4,18 @@
 #include <typeinfo>
 #define STRING(Value) #Value
 
+
 myNeuro::myNeuro()
 {
    std::cout<<"\n_________________________________ start myNeuro cpp\n";;
     //--------многослойный
     inputNeurons = n1;
     outputNeurons =n3;
-    
-    nlCount = 2;//укажи сколько слоев используешь а нaвернется
+
+    nlCount = 2;//(!!!)укажи сколько слоев используешь, иначе нaвернется
 
     errLimit = errLimitG;
-    couldoptimizeM = false;
+
     errOptinizationLimit = errOptinizationLimitG;
     list = (nnLay*) malloc((nlCount)*sizeof(nnLay));
 
@@ -95,22 +96,58 @@ void myNeuro::feedForwarding(bool mode_train)
 
 void myNeuro::optimiseWay()
 {
-//    std::cout<<"\n_________________________________ optimiseWay!!!!!!!! \n";
+    //std::cout<<"\n_________________________________ optimiseWay!!!!!!!! \n";
     //start it now or later?
-    couldoptimizeM = true;
+    if (!couldoptimizeM)couldoptimizeM = true;
 }
 
-void myNeuro::processErrors(int i, bool & startOptimisation, bool showError)
+void myNeuro::processErrors(int i, bool & startOptimisation, bool showError = false, float totalE = 0.0)
 {
     float  err1 = *list[i].getErrorsM();
-    startOptimisation = startOptimisation & (err1<errOptinizationLimit) & true ; // & (i == 3)
+    err1 = absF(err1);
+    int lenLayer = list[i].getOutCount();
 
+//    float sumErr = 0;
+//    float p = err1;
+//    for( int k = 0; k< lenLayer; k++ )
+//        sumErr += p++;
+
+//    float lenErr1 = err1[0];
+//    float lenErr2 = err1[1];
+//    float lenErr3 = err1[2];
+
+
+    startOptimisation = startOptimisation & (totalE<errOptinizationLimit) ; // & (i == (nlCount-1)) // & true ; //
     if (list[i].couldoptimizeL != startOptimisation) list[i].couldoptimizeL = startOptimisation;
 
-    if (showError)
-        std::cout << " layer:" + std::to_string(i) + " error:" + std::to_string(err1) + " (" +
-//                "" + std::to_string((startOptimisation) ) + ") (" +
-                     std::to_string(list[i].getInCount()) + ") ";
+
+    bool showBecuseOpt = (couldoptimizeM || iCycle<3 );
+
+    if (showError){
+        std::cout << " layer:" + std::to_string(i);
+        std::cout << " error:" + std::to_string(err1);
+        std::cout << " sum_delta_error:" + std::to_string(totalE);
+        std::cout << " (optimisation:" + std::to_string((startOptimisation) ) + ")" ;
+        std::cout <<  " (len:" + std::to_string(lenLayer ) + ")";
+    }
+
+    if(showError & !showBecuseOpt)std::cout <<  endl;
+
+    if(showError & showBecuseOpt){
+
+//        std::cout<<"\n";
+//        std::cout<<"err1 "<<lenErr1;
+//        std::cout<<"err2 "<<lenErr2;
+//        std::cout<<"err2 "<<lenErr3;
+
+        std::cout<<"\n";
+        //if(list[i].couldoptimizeL )std::cout<<"\n_________________________________\n";
+        std::cout<<" layer:"+std::to_string(i)+" ";
+        printArray(list[i].getErrors(),i, lenLayer);
+        //if(list[i].couldoptimizeL )std::cout<<"\n_________________________________\n";
+        std::cout<<"\n";
+    }
+
 }
 
     void myNeuro::backPropagate()
@@ -119,28 +156,21 @@ void myNeuro::processErrors(int i, bool & startOptimisation, bool showError)
     //-------------------------------ERRORS-----CALC---------
     bool showError = false;
     bool startOptimisation = true;
-    if(rand()%10000==9){
+    if(rand()%10000==9 || iCycle<3){
         showError = true;
     }
 
-    list[nlCount-1].calcOutError(targets, showError);//for 1 out layer (where 2 output neurons for our case)
+    //processErrors(nlCount,startOptimisation,showError);//how calc resul error?
 
-    processErrors(nlCount-1,startOptimisation,showError);
+    float total_out_error = list[nlCount-1].calcOutError(targets, showError);//for 1 out layer (where 2 output neurons for our case)
+
+    processErrors(nlCount-1,startOptimisation,showError,total_out_error);
 
     for (int i =nlCount-2; i>=0; i--){//for everyone over layer
         list[i].calcHidError(list[i+1].getErrors(),list[i+1].getMatrix(),
                              list[i+1].getInCount(),list[i+1].getOutCount(), showError);
 
         processErrors(i,startOptimisation,showError);
-        if(showError & couldoptimizeM){
-        //if (true) {
-            std::cout<<"\n";
-            if(list[i].couldoptimizeL )std::cout<<"\n_________________________________\n";
-            std::cout<<" layer:"+std::to_string(i)+" ";
-            printArray(list[i+1].getErrors(),i, 100);
-            if(list[i].couldoptimizeL )std::cout<<"\n_________________________________\n";
-            std::cout<<"\n";
-        }
 
     }
 
@@ -185,14 +215,14 @@ void myNeuro::printArray(float *arr, int iList, int s)
         str_f = 'f';
         if(type_s == str_f | type_s == "float") {
 
-            int i2 = 0;
-            float N = arr[inp];
-            while (N > 0)
-            {
-                N = N / 10; ++i2;
-            }
-
             //v0
+            int i2 = 0;
+            float N = absF(arr[inp]);
+            while (N < 0.9 && i2<99)
+            {
+                N = N * 10; ++i2;
+            }
+            if (i2==99)i2=0;
             std::cout<< i2;
 
             //v1

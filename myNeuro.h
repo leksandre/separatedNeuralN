@@ -13,7 +13,7 @@
 #include <string>
 #include <cstdio>
 #include <cstdlib>
-#include <cmath>
+//#include <cmath>
 #include <vector>
 #include <set>
 #include <iterator>
@@ -45,7 +45,10 @@ const int n3 = 10; // Ten classes: 0 - 9
 
 const float errLimitG = 0.000005;
 
-const float errOptinizationLimitG = 0.00003;
+const float errOptinizationLimitG = 0.0001; //0.00003; //0.000001; //0.00003;
+
+bool couldoptimizeM;
+int iCycle;
 
 //for win!!
 //
@@ -63,7 +66,14 @@ std::string toString(const T& value) {
 
 
 
-
+double absD(double N) {
+    if(N<0)N=N*-1;
+    return N;
+}
+float absF(float N) {
+    if(N<0)N=N*-1;
+    return N;
+}
 
 
 #define learnRate 0.1
@@ -73,13 +83,13 @@ class myNeuro
 public:
     myNeuro();
 
-    bool couldoptimizeM;
+
 
     struct nnLay{
            int in;
            int out;
 
-            bool couldoptimizeL;
+           bool couldoptimizeL;
 
            float** matrix;
            float* hidden;
@@ -171,8 +181,9 @@ public:
            {
                return hidden;
            };
-           void calcOutError(float *targets, bool & showError )
+           float calcOutError(float *targets, bool & showError )
            {
+               float errsum = 0.0;
                errors = (float*) malloc((out)*sizeof(float));
                for(int ou =0; ou < out; ou++)
                {
@@ -182,7 +193,10 @@ public:
                    //if (errTmp > errLimitG)showError = true;
 
                    errors[ou] = errTmp;
+
+                   errsum += absF(errTmp);
                }
+               return errsum;
            };
            void calcHidError(float *targets,float **outWeights,int inS, int outS, bool & showError)
            {
@@ -221,7 +235,7 @@ public:
     void feedForwarding(bool mode_train);
     void backPropagate();
     void optimiseWay();
-    void processErrors(int i, bool & startOptimisation, bool showError);
+    void processErrors(int i, bool & startOptimisation, bool showError, float totalE);
     void train(float *in, float *targ);
     void query(float *in);
     void printArray(float *arr, int iList, int s);
