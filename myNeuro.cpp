@@ -201,6 +201,7 @@ void myNeuro::query(float *in)
    std::cout<<"\n_________________________________ start myNeuro cpp query\n";;
     inputs=in;
     feedForwarding(false);
+    std::cout<<"\n_________________________________ end myNeuro cpp query\n";;
 }
 
 void myNeuro::printArray(float *arr, int iList, int s)

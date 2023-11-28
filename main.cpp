@@ -346,7 +346,7 @@ int main(int argc, char *argv[])
             bb->train(cba, tar2);
             iCycle++;
         }
-
+        std::cout << "\n________________end_train_________________\n";;
         std::cout << "\n___________________calculate_RESULT_____________\n";;
         bb->query(abc);
         std::cout << "______\n";;
@@ -377,6 +377,9 @@ int main(int argc, char *argv[])
 
 
 
+
+    iCycle = 10;//не показывать в начале лог ошибок
+
     report.open(report_fn.c_str(), ios::out);
     image.open(training_image_fn.c_str(), ios::in | ios::binary); // Binary image file
     label.open(training_label_fn.c_str(), ios::in | ios::binary); // Binary label file
@@ -392,64 +395,84 @@ int main(int argc, char *argv[])
     }
 
     init_array();
+    std::cout << "\n________________start_train_________________\n";;
+
+    while(!couldoptimizeM){
+        for (int sample = 1; sample <= nTraining; ++sample) {
+
+            if(!couldoptimizeM)iCycle++;
+
+            ////cout << "Sample " << sample << endl;
+            //// Getting (image, label)
+            int labelN = input(false);
+            //cout << "labelN " << labelN << endl;
+            //// Learning process: Perceptron (Forward procedure) - Back propagation
+            //int nIterations = learning_process();
 
 
-    for (int sample = 1; sample <= nTraining; ++sample) {
+
+
+            float* binNumber = new float[n1];
+            for (int i = 0; i < n1; i++)
+            {
+                binNumber[i] =out1[i];
+
+            }
 
 
 
-        ////cout << "Sample " << sample << endl;
-        //// Getting (image, label)
-        int labelN = input(false);
-        //cout << "labelN " << labelN << endl;
-        //// Learning process: Perceptron (Forward procedure) - Back propagation
-        //int nIterations = learning_process();
+            float* target = new float[10];
+            target[labelN] = 1;
+            bb->train(binNumber, target);
 
 
-       
 
-        float* binNumber = new float[n1];
-        for (int i = 0; i < n1; i++)
-        {
-            binNumber[i] =out1[i];
-        
+
+
+
+            //// Write down the squared error
+            //cout << "No. iterations: " << nIterations << endl;
+            //printf("Error: %0.6lf\n\n", square_error());
+            //report << "Sample " << sample << ": No. iterations = " << nIterations << ", Error = " << square_error() << endl;
+            //// Save the current network (weights)
+            //if (sample % 100 == 0) {
+            //    cout << "Saving the network to " << model_fn << " file." << endl;
+            //    write_matrix(model_fn);
+            //}
+
         }
 
-       
-
-        float* target = new float[10];
-        target[labelN] = 1;
-        bb->train(binNumber, target);
 
 
 
+        //reopen our file with images and labels
+        image.clear();
+        image.seekg(0);
+        label.clear();
+        label.seekg(0);
+        for (int i = 1; i <= 16; ++i) {
+            image.read(&number, sizeof(char));
+        }
+        for (int i = 1; i <= 8; ++i) {
+            label.read(&number, sizeof(char));
+        }
 
-
-
-        //// Write down the squared error
-        //cout << "No. iterations: " << nIterations << endl;
-        //printf("Error: %0.6lf\n\n", square_error());
-        //report << "Sample " << sample << ": No. iterations = " << nIterations << ", Error = " << square_error() << endl;
-        //// Save the current network (weights)
-        //if (sample % 100 == 0) {
-        //    cout << "Saving the network to " << model_fn << " file." << endl;
-        //    write_matrix(model_fn);
-        //}
 
 
     }
 
+    std::cout << "\n________________end_train_________________\n";;
+    std::cout<<"\n______________________________\n";
+    std::cout<<"iCycle:"<<iCycle;
+    std::cout << "\n___________________calculate_RESULT_____________\n";;
 
-
-    for (int sample = 1; sample <= nTraining; ++sample) {
-
+    for (int sample = 1; sample <= 10; ++sample) {
         ////cout << "Sample " << sample << endl;
         //// Getting (image, label)
-        int labelN = input(false);
+        int labelN = input(true);
         cout << "labelN " << labelN << endl;
         //// Learning process: Perceptron (Forward procedure) - Back propagation
         //int nIterations = learning_process();
-
         float* binNumber = new float[n1];
         for (int i = 0; i < n1; i++)
         {
@@ -461,7 +484,6 @@ int main(int argc, char *argv[])
 
     // Save the final network
     write_matrix(model_fn);
-
     report.close();
     image.close();
     label.close();
@@ -481,7 +503,6 @@ int main(int argc, char *argv[])
 
 
     time(&end);
-
     // Calculating total time taken by the program.
     double time_taken;
     time_taken = double(end - start);
