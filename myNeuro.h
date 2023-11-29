@@ -49,6 +49,7 @@ const float errOptinizationLimitG = 0.0001; //0.00003; //0.000001; //0.00003;
 
 bool couldoptimizeM;
 int iCycle;
+int iCycleTotal;
 
 //for win!!
 //

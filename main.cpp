@@ -379,7 +379,7 @@ int main(int argc, char *argv[])
 
 
     iCycle = 10;//не показывать в начале лог ошибок
-
+    iCycleTotal = 0;
     report.open(report_fn.c_str(), ios::out);
     image.open(training_image_fn.c_str(), ios::in | ios::binary); // Binary image file
     label.open(training_label_fn.c_str(), ios::in | ios::binary); // Binary label file
@@ -401,7 +401,7 @@ int main(int argc, char *argv[])
         for (int sample = 1; sample <= nTraining; ++sample) {
 
             if(!couldoptimizeM)iCycle++;
-
+            iCycleTotal++;
             ////cout << "Sample " << sample << endl;
             //// Getting (image, label)
             int labelN = input(false);
@@ -462,8 +462,7 @@ int main(int argc, char *argv[])
     }
 
     std::cout << "\n________________end_train_________________\n";;
-    std::cout<<"\n______________________________\n";
-    std::cout<<"iCycle:"<<iCycle;
+
     std::cout << "\n___________________calculate_RESULT_____________\n";;
 
     for (int sample = 1; sample <= 10; ++sample) {
@@ -481,6 +480,9 @@ int main(int argc, char *argv[])
         bb->query(binNumber);
     }
 
+    std::cout<<"\n______________________________\n";
+    std::cout<<"iCycle:"<<iCycle;
+    std::cout<<"iCycleTotal:"<<iCycleTotal;
 
     // Save the final network
     write_matrix(model_fn);
