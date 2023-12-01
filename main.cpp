@@ -269,10 +269,11 @@ int main(int argc, char *argv[])
 
 
     myNeuro* bb = new myNeuro();
+    iCycleTotal = 0;
 
+//    if (false) {
+    if (true) {
 
-    if (false) {
-//    if (true) {
 
 
 
@@ -340,12 +341,36 @@ int main(int argc, char *argv[])
         std::cout << "\n________________start_train_________________\n";;
         iCycle = 0;
         int nTrainingSimple = 100000;
-        while (iCycle < nTrainingSimple)
+        while (iCycle < nTrainingSimple and !couldoptimizeM)
         {
-            bb->train(abc, tar1);
-            bb->train(cba, tar2);
+            if(!couldoptimizeM) iCycleTotal++;
+            float ** errors1 = bb->train(abc, tar1);
+            float ** errors2 = bb->train(cba, tar2);
             iCycle++;
+
+            if(couldoptimizeM)
+            {
+                cout<<"size errors1 " << ( sizeof(errors1) / sizeof(errors1[1]) ) <<endl;
+                cout<<"size errors1_ " << ( sizeof(errors1) / sizeof(errors1[1][0]) ) <<endl;
+                cout<<"size errors1[0] " << ( sizeof(errors1[1]) / sizeof(errors1[1][0]) ) <<endl;
+                cout<<"size errors1[0][0] " << ( sizeof(errors1[1][0]) / sizeof(float) ) <<endl;
+
+                for(int i=0;i<3;i++)
+                {
+                    for(int j=0;j<21;j++)
+                    {
+                        cout<<"\t"<<errors1[i][j];
+                    }
+                    cout<<endl;
+                }
+
+
+            }
+
+
         }
+
+
         std::cout << "\n________________end_train_________________\n";;
         std::cout << "\n___________________calculate_RESULT_____________\n";;
         bb->query(abc);
@@ -360,8 +385,11 @@ int main(int argc, char *argv[])
 
     }
 
+    std::cout<<"\n______________________________\n";
+    std::cout<<"iCycle:"<<iCycle<<endl;
+    std::cout<<"iCycleTotal:"<<iCycleTotal<<endl;
 
-//    return 0;
+    return 0;
 
 
 
@@ -481,8 +509,8 @@ int main(int argc, char *argv[])
     }
 
     std::cout<<"\n______________________________\n";
-    std::cout<<"iCycle:"<<iCycle;
-    std::cout<<"iCycleTotal:"<<iCycleTotal;
+    std::cout<<"iCycle:"<<iCycle<<endl;
+    std::cout<<"iCycleTotal:"<<iCycleTotal<<endl;
 
     // Save the final network
     write_matrix(model_fn);

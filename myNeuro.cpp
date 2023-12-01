@@ -67,7 +67,7 @@ myNeuro::myNeuro()
 
 }
 
-void myNeuro::feedForwarding(bool mode_train)
+float **  myNeuro::feedForwarding(bool mode_train)
 {
 //   std::cout<<"\n_________________________________ start myNeuro cpp feedForwarding\n";
     list[0].toHiddenLayer(inputs);
@@ -77,7 +77,7 @@ void myNeuro::feedForwarding(bool mode_train)
     if (mode_train)//it is train mode
     {
         // printArray(list[3].getErrors(),list[3].getOutCount());
-        backPropagate();// обратн расп ошибки
+        return backPropagate();// обратн расп ошибки
     } else // is query mode
     {
 //        std::cout<<std::to_string(outputNeurons)+"!mode_train - Feed Forward: \n";;
@@ -89,7 +89,9 @@ void myNeuro::feedForwarding(bool mode_train)
             float outit = list[nlCount - 1].hidden[out];
             std::cout << std::to_string(outit) + "\n";
         }
-        return;
+        float ** err3f;
+        err3f = (float**) malloc(sizeof(float)*2);
+        return err3f;
     }
 
 }
@@ -101,7 +103,7 @@ void myNeuro::optimiseWay()
     if (!couldoptimizeM)couldoptimizeM = true;
 }
 
-void myNeuro::processErrors(int i, bool & startOptimisation, bool showError = false, float totalE = 0.0)
+float* myNeuro::processErrors(int i, bool & startOptimisation, bool showError = false, float totalE = 0.0)
 {
     float  err1 = *list[i].getErrorsM();
     err1 = absF(err1);
@@ -147,10 +149,11 @@ void myNeuro::processErrors(int i, bool & startOptimisation, bool showError = fa
         //if(list[i].couldoptimizeL )std::cout<<"\n_________________________________\n";
         std::cout<<"\n";
     }
+    return list[i].getErrors();
 
 }
 
-    void myNeuro::backPropagate()
+float ** myNeuro::backPropagate()
 {   
     //   std::cout<<"\n_________________________________ start myNeuro cpp backPropagate\n";;
     //-------------------------------ERRORS-----CALC---------
@@ -162,17 +165,27 @@ void myNeuro::processErrors(int i, bool & startOptimisation, bool showError = fa
 
     //processErrors(nlCount,startOptimisation,showError);//how calc resul error?
 
-    float total_out_error = list[nlCount-1].calcOutError(targets, showError);//for 1 out layer (where 2 output neurons for our case)
+    //start return sum of erros... why? just interresting
+    float sum_out_error = list[nlCount-1].calcOutError(targets, showError);//for 1 out layer (where 2 output neurons for our case)
 
-    processErrors(nlCount-1,startOptimisation,showError,total_out_error);
+    //try to return array of errors up, and calculate them
+    //
+    float ** err3;
+    float * err2 = processErrors(nlCount-1,startOptimisation,showError,sum_out_error);
+    err3 = (float**) malloc((nlCount)*sizeof(float)*2);//*2 malloc fail in counting mem
+    err3[nlCount-1] = err2;
+    //
+    /////
+
 
     for (int i =nlCount-2; i>=0; i--){//for everyone over layer
         list[i].calcHidError(list[i+1].getErrors(),list[i+1].getMatrix(),
                              list[i+1].getInCount(),list[i+1].getOutCount(), showError);
 
-        processErrors(i,startOptimisation,showError);
-
+        float * err21 = processErrors(i,startOptimisation,showError);
+        err3[i] = err21;
     }
+
 
     if(showError) {
         std::cout<<"\n";
@@ -186,14 +199,15 @@ void myNeuro::processErrors(int i, bool & startOptimisation, bool showError = fa
     for (int i =nlCount-1; i>0; i--)
         list[i].updMatrix(list[i-1].getHidden());
     list[0].updMatrix(inputs);
+    return err3;
 }
 
-void myNeuro::train(float *in, float *targ)
+float ** myNeuro::train(float *in, float *targ)
 {
 //   std::cout<<"\n_________________________________ start myNeuro cpp train\n";;
     inputs = in;
     targets = targ;
-    feedForwarding(true);
+    return feedForwarding(true);
 }
 
 void myNeuro::query(float *in)
@@ -207,6 +221,7 @@ void myNeuro::query(float *in)
 void myNeuro::printArray(float *arr, int iList, int s)
 {
 //    std::cout<<"printArray__\n";;
+    std::string str_outErrors;
     for(int inp =0; inp < s; inp++)
     {
         std::string type_s;
@@ -219,12 +234,15 @@ void myNeuro::printArray(float *arr, int iList, int s)
             //v0
             int i2 = 0;
             float N = absF(arr[inp]);
+            float Nf = absF(arr[inp]);
             while (N < 0.9 && i2<99)
             {
                 N = N * 10; ++i2;
             }
             if (i2==99)i2=0;
-            std::cout<< i2;
+            std::cout << i2;
+
+            str_outErrors += to_string(inp) + '(' + to_string(Nf) + ')';
 
             //v1
             //std::cout<< round(arr[inp]*1000000);
@@ -239,7 +257,8 @@ void myNeuro::printArray(float *arr, int iList, int s)
         }else{
             std::cout<< (arr[inp]);
         }
-
         std::cout<< ',';
     }
+
+    cout << "\n" << fixed << str_outErrors;
 }

@@ -233,11 +233,11 @@ public:
            };
     };
 
-    void feedForwarding(bool mode_train);
-    void backPropagate();
+    float ** feedForwarding(bool mode_train);
+    float ** backPropagate();
     void optimiseWay();
-    void processErrors(int i, bool & startOptimisation, bool showError, float totalE);
-    void train(float *in, float *targ);
+    float* processErrors(int i, bool & startOptimisation, bool showError, float totalE);
+    float ** train(float *in, float *targ);
     void query(float *in);
     void printArray(float *arr, int iList, int s);
 
