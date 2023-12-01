@@ -348,6 +348,7 @@ int main(int argc, char *argv[])
             float ** errors2 = bb->train(cba, tar2);
             iCycle++;
 
+            int maxN = 0;
             if(couldoptimizeM)
             {
                 cout<<"size errors1 " << ( sizeof(errors1) / sizeof(errors1[1]) ) <<endl;
@@ -355,17 +356,19 @@ int main(int argc, char *argv[])
                 cout<<"size errors1[0] " << ( sizeof(errors1[1]) / sizeof(errors1[1][0]) ) <<endl;
                 cout<<"size errors1[0][0] " << ( sizeof(errors1[1][0]) / sizeof(float) ) <<endl;
 
-                for(int i=0;i<3;i++)
+                for(int i=0;i<2;i++)
                 {
-                    for(int j=0;j<21;j++)
+                    for(int j=0;j<241;j++)
                     {
-                        cout<<"\t"<<errors1[i][j];
+                        cout<<"\t"<<i<<":"<<j<<"\t"<<errors1[i][j];
+                        if(errors1[i][j]!=0)maxN=i;
                     }
-                    cout<<endl;
+                    cout<<endl<<"\n______________________________\n"<<endl;
                 }
-
+                std::cout << "maxN="<<maxN;
 
             }
+
 
 
         }

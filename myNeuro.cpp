@@ -105,7 +105,7 @@ void myNeuro::optimiseWay()
 
 float* myNeuro::processErrors(int i, bool & startOptimisation, bool showError = false, float totalE = 0.0)
 {
-    float  err1 = *list[i].getErrorsM();
+    float  err1  = *list[i].getErrorsM();
     err1 = absF(err1);
     int lenLayer = list[i].getOutCount();
 
@@ -135,8 +135,9 @@ float* myNeuro::processErrors(int i, bool & startOptimisation, bool showError = 
 
     if(showError & !showBecuseOpt)std::cout <<  endl;
 
-    if(showError & showBecuseOpt){
+    if( (showError & showBecuseOpt) || couldoptimizeM ){
 
+        if(couldoptimizeM)std::cout<<"\n_________________!couldoptimizeM!________________\n";
 //        std::cout<<"\n";
 //        std::cout<<"err1 "<<lenErr1;
 //        std::cout<<"err2 "<<lenErr2;
@@ -149,6 +150,12 @@ float* myNeuro::processErrors(int i, bool & startOptimisation, bool showError = 
         //if(list[i].couldoptimizeL )std::cout<<"\n_________________________________\n";
         std::cout<<"\n";
     }
+
+
+//    float * e1 = list[i].getErrors();
+//    cout<<','<<sizeof(e1)/sizeof(float) ;
+//    return e1;
+
     return list[i].getErrors();
 
 }
@@ -171,9 +178,8 @@ float ** myNeuro::backPropagate()
     //try to return array of errors up, and calculate them
     //
     float ** err3;
-    float * err2 = processErrors(nlCount-1,startOptimisation,showError,sum_out_error);
-    err3 = (float**) malloc((nlCount)*sizeof(float)*2);//*2 malloc fail in counting mem
-    err3[nlCount-1] = err2;
+    err3 = (float**) malloc((nlCount*128)*sizeof(float));//*2 malloc fail in counting mem
+    err3[nlCount-1] = processErrors(nlCount-1,startOptimisation,showError,sum_out_error);
     //
     /////
 
@@ -182,8 +188,8 @@ float ** myNeuro::backPropagate()
         list[i].calcHidError(list[i+1].getErrors(),list[i+1].getMatrix(),
                              list[i+1].getInCount(),list[i+1].getOutCount(), showError);
 
-        float * err21 = processErrors(i,startOptimisation,showError);
-        err3[i] = err21;
+        err3[i] = processErrors(i,startOptimisation,showError);
+
     }
 
 
