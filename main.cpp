@@ -342,24 +342,39 @@ int main(int argc, char *argv[])
         std::cout << "\n________________start_train_________________\n";;
         iCycle = 0;
         int nTrainingSimple = 100000;
-        float ** errTotal;
-        float ** errTmp1;
-        float ** errTmp2;
+
+//        float ** errTotal;
+//        float ** errTmp;
+//        float ** errTmp2;
+
+        float ** errTmp = (float**) malloc((bb->nlCount-1)*sizeof(float)*2);
+        float * e1;
+        for(int i=(bb->nlCount-2);i>=0;i--)
+            errTmp[i] = e1;
+
         while (iCycle < nTrainingSimple and !couldoptimizeM)
         {
             if(!couldoptimizeM) iCycleTotal++;
 
             float ** errors1 = bb->train(abc, tar1);
+
+//            if(iCycle==0)
 //            for(int i=(bb->nlCount-2);i>=0;i--)
-//                errTmp1[i] = bb->list[i].getErrors();
+//                errTmp[i] = bb->list[i].getErrors();
+
+            for(int i=(bb->nlCount-2);i>=0;i--)
+                errTmp[i] = bb->sumFloatMD(errTmp[i],bb->list[i].getErrors(),bb->list[i].getOutCount());
+
 
             float ** errors2 = bb->train(cba, tar2);
+            for(int i=(bb->nlCount-2);i>=0;i--)
+                errTmp[i] = bb->sumFloatMD(errTmp[i],bb->list[i].getErrors(),bb->list[i].getOutCount());
 //            for(int i=(bb->nlCount-2);i>=0;i--)
-//                errTmp2[i] = bb->list[i].getErrors();
+//                errTmp[i] = bb->list[i].getErrors();
 
 
-//            for(int i=(bb->nlCount-2);i>=0;i--)
-//                errTotal[i] = dd->sumFloatMD(errTmp1[i],errTmp2[i],bb->list[i].getOutCount())
+            for(int i=(bb->nlCount-2);i>=0;i--)
+                errTmp[i] = bb->sumFloatMD(errTmp[i],bb->list[i].getErrors(),bb->list[i].getOutCount());
 
             iCycle++;
 
@@ -371,8 +386,12 @@ int main(int argc, char *argv[])
                 for(int i=(bb->nlCount-2);i>=0;i--)
                 {
 
-                    cout<<" layer:"+std::to_string(i)+" ";
+                    cout<<" layer :"+std::to_string(i)+" ";
                     bb->printArray(bb->list[i].getErrors(),i, bb->list[i].getOutCount());
+                    std::cout<<"\n";
+
+                    cout<<" errTmp:"+std::to_string(i)+" ";
+                    bb->printArray(errTmp[i],i, bb->list[i].getOutCount());
                     std::cout<<"\n";
 //  just trash
 //                    bb->printArray(errors1[i],0,300);

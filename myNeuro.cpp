@@ -238,7 +238,7 @@ float * myNeuro::sumFloatMD(float * left,float *right,int inS)
     float * errors = (float*) malloc((inS)*sizeof(float));
     for(int i=0; i < inS; i++)
     {
-            errors[i] = left[i] * right[i];
+            errors[i] = left[i] + right[i];
     }
     return errors;
 };
