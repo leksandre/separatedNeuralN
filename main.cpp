@@ -260,6 +260,9 @@ void write_matrix(string file_name) {
 
 
 
+
+
+
 int main(int argc, char *argv[])
 {
     //QCoreApplication a(argc, argv);
@@ -272,8 +275,10 @@ int main(int argc, char *argv[])
     myNeuro* bb = new myNeuro();
     iCycleTotal = 0;
 
-//    if (false) {
-    if (true) {
+
+
+    if (false) {
+//    if (true) {
 
 
 
@@ -343,43 +348,51 @@ int main(int argc, char *argv[])
         iCycle = 0;
         int nTrainingSimple = 100000;
 
-//        float ** errTotal;
-//        float ** errTmp;
-//        float ** errTmp2;
 
-        float ** errTmp = (float**) malloc((bb->nlCount-1)*sizeof(float)*2);
-        float * e1;
-        for(int i=(bb->nlCount-2);i>=0;i--)
-            errTmp[i] = e1;
 
-        while (iCycle < nTrainingSimple and !couldoptimizeM)
+
+//        float * e1;
+//        for(int i=(bb->nlCount-2);i>=0;i--)
+//            errTmp[i] = e1;
+
+        while (iCycle < nTrainingSimple and !is_optimizedM)
+        //train until specified accuracy level
         {
-            if(!couldoptimizeM) iCycleTotal++;
+            if(!is_optimizedM) iCycleTotal++;
 
-            float ** errors1 = bb->train(abc, tar1);
+            float ** errors1 = bb->train(abc, tar1,allow_optimisation_transform);
 
 //            if(iCycle==0)
 //            for(int i=(bb->nlCount-2);i>=0;i--)
 //                errTmp[i] = bb->list[i].getErrors();
 
-            for(int i=(bb->nlCount-2);i>=0;i--)
-                errTmp[i] = bb->sumFloatMD(errTmp[i],bb->list[i].getErrors(),bb->list[i].getOutCount());
+//            for(int i=(bb->nlCount-2);i>=0;i--)
+//                errTmp[i] = bb->sumFloatMD(errTmp[i],bb->list[i].getErrors(),bb->list[i].getOutCount());
 
 
-            float ** errors2 = bb->train(cba, tar2);
-            for(int i=(bb->nlCount-2);i>=0;i--)
-                errTmp[i] = bb->sumFloatMD(errTmp[i],bb->list[i].getErrors(),bb->list[i].getOutCount());
+            float ** errors2 = bb->train(cba, tar2,allow_optimisation_transform);
+
+//            for(int i=(bb->nlCount-2);i>=0;i--)
+//                errTmp[i] = bb->sumFloatMD(errTmp[i],bb->list[i].getErrors(),bb->list[i].getOutCount());
+
+
 //            for(int i=(bb->nlCount-2);i>=0;i--)
 //                errTmp[i] = bb->list[i].getErrors();
 
 
-            for(int i=(bb->nlCount-2);i>=0;i--)
-                errTmp[i] = bb->sumFloatMD(errTmp[i],bb->list[i].getErrors(),bb->list[i].getOutCount());
+//            for(int i=(bb->nlCount-2);i>=0;i--)
+//                errTmp[i] = bb->sumFloatMD(errTmp[i],bb->list[i].getErrors(),bb->list[i].getOutCount());
 
             iCycle++;
 
+//            if(iCycle>1000)
+            if (allow_optimisation_transform){
+                for(int i=(bb->nlCount-2);i>=0;i--)
+                    bb->optimize_layer(i);
+            }
 
-            if(couldoptimizeM)
+
+            if(is_optimizedM)
             {
                 cout<<endl<<"_______________show_errors_______________\n"<<endl;
 //                for(int i=(bb->nlCount-1);i>=0;i--) //skip "out" layer (nlCount-1) we could not modified it (a am too stupid for that)
@@ -391,7 +404,7 @@ int main(int argc, char *argv[])
                     std::cout<<"\n";
 
                     cout<<" errTmp:"+std::to_string(i)+" ";
-                    bb->printArray(errTmp[i],i, bb->list[i].getOutCount());
+                    bb->printArray(bb->list[i].errTmp,i, bb->list[i].getOutCount());
                     std::cout<<"\n";
 //  just trash
 //                    bb->printArray(errors1[i],0,300);
@@ -425,7 +438,7 @@ int main(int argc, char *argv[])
 
          //return a.exec();
 
-    }
+
 
     std::cout<<"\n______________________________\n";
     std::cout<<"iCycle:"<<iCycle<<endl;
@@ -439,9 +452,16 @@ int main(int argc, char *argv[])
     std::cout << " sec " << "\n";
 
 
+    if (allow_optimisation_transform) {
+        bb->write_matrix_var1(model_fn_opt);
+    } else {
+        bb->write_matrix_var1(model_fn);
+    }
+
+
     return 0;
 
-
+    }
 
 
 
@@ -475,10 +495,13 @@ int main(int argc, char *argv[])
     init_array();
     std::cout << "\n________________start_train_________________\n";;
 
-    while(!couldoptimizeM){
+
+
+    while(!is_optimizedM){
         for (int sample = 1; sample <= nTraining; ++sample) {
 
-            if(!couldoptimizeM)iCycle++;
+            if(!is_optimizedM)iCycle++;
+            if(is_optimizedM)continue;
             iCycleTotal++;
             ////cout << "Sample " << sample << endl;
             //// Getting (image, label)
@@ -501,9 +524,16 @@ int main(int argc, char *argv[])
 
             float* target = new float[10];
             target[labelN] = 1;
-            bb->train(binNumber, target);
+            bb->train(binNumber, target,allow_optimisation_transform);
 
+            if (allow_optimisation_transform){
 
+                for(int i=(bb->nlCount-2);i>=0;i--){
+
+                   // errTmp[i] = bb->sumFloatMD(errTmp[i],bb->list[i].getErrors(),bb->list[i].getOutCount());
+                    bb->optimize_layer(i);
+                }
+            }
 
 
 
@@ -535,9 +565,33 @@ int main(int argc, char *argv[])
             label.read(&number, sizeof(char));
         }
 
-
-
     }
+
+
+
+
+    if(is_optimizedM)
+    {
+        cout<<endl<<"_______________show_errors_______________\n"<<endl;
+       for(int i=(bb->nlCount-2);i>=0;i--)
+        {
+
+            cout<<" layer :"+std::to_string(i)+" ";
+            bb->printArray(bb->list[i].getErrors(),i, bb->list[i].getOutCount());
+            std::cout<<"\n";
+
+            if (allow_optimisation_transform) {
+                cout << " errTmp:" + std::to_string(i) + " ";
+                bb->printArray(bb->list[i].errTmp, i, bb->list[i].getOutCount());
+                std::cout << "\n";
+            }
+
+
+
+        }
+    }
+
+
 
     std::cout << "\n________________end_train_________________\n";;
 

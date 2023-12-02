@@ -1,3 +1,27 @@
+#ifndef MY_FUnC_HEADER_
+#define MY_FUnC_HEADER_
+bool is_optimizedM;
+
+//switcher
+bool allow_optimisation_transform = true;
+//bool allow_optimisation_transform = false;
+
+int iCycle;
+int iCycleTotal;
+
+//static
+static double absD(double N) {
+    if(N<0)N=N*-1;
+    return N;
+}
+//static
+static float absF(float N) {
+    if(N<0)N=N*-1;
+    return N;
+}
+#endif
+
+
 #ifndef MYNEURO_H
 #define MYNEURO_H
 #include <iostream>
@@ -29,6 +53,7 @@ const string training_label_fn = "mnist/train-labels.idx1-ubyte";
 
 // Weights file name
 const string model_fn = "model-neural-network.dat";
+const string model_fn_opt = "model-neural-network-optimized.dat";
 
 // Report file name
 const string report_fn = "training-report.dat";
@@ -47,9 +72,6 @@ const float errLimitG = 0.000005;
 
 const float errOptinizationLimitG = 0.0001; //0.00003; //0.000001; //0.00003;
 
-bool couldoptimizeM;
-int iCycle;
-int iCycleTotal;
 
 //for win!!
 //
@@ -67,14 +89,6 @@ std::string toString(const T& value) {
 
 
 
-double absD(double N) {
-    if(N<0)N=N*-1;
-    return N;
-}
-float absF(float N) {
-    if(N<0)N=N*-1;
-    return N;
-}
 
 
 #define learnRate 0.1
@@ -90,15 +104,46 @@ public:
            int in;
            int out;
 
-           bool couldoptimizeL;
-
-           float** matrix;
-           float* hidden;
-           float* errors;
+           bool is_optimizedL;
+           float * errTmp;
+           float ** matrix;
+           float * hidden;
+           float * errors;
+//           int setInCount(int inputs){in=inputs};
+//           int setOutCount(int outputs){out=outputs};
            int getInCount(){return in;}
            int getOutCount(){return out;}
            float **getMatrix(){return matrix;}
            float *getErrorsM(){return errors;}
+
+        void truncMatrixOut(int index) {
+               if (out<=index)return;
+               if (out<=1)return;
+            if(index==0){
+                index=1;
+            }
+            for (int ou = (index - 1); ou < (out - 1); ou++) {
+                for (int hid = 0; hid < in; hid++) {
+                    matrix[hid][ou] = matrix[hid][ou + 1];
+                }
+            }
+            out = out - 1;
+        };
+
+        void truncMatrixIn(int index) {
+            if (in<=index)return;
+            if (in<=1)return;
+            if(index==0){
+                index=1;
+            }
+            for (int ou = 0; ou < out; ou++) {
+                for (int hid = index - 1; hid < (in - 1); hid++) {
+                    matrix[hid][ou] = matrix[hid + 1][ou];
+                }
+            }
+            in = in - 1;
+        };
+
            void updMatrix(float *enteredVal)
            {
                for(int ou =0; ou < out; ou++)
@@ -123,6 +168,9 @@ public:
                hidden = (float*) malloc((out)*sizeof(float));
 
                matrix = (float**) malloc((in+1)*sizeof(float)*2);//*2 malloc fail in counting mem
+
+
+
                for(int inp =0; inp < in+1; inp++)
                {
                    try {
@@ -164,6 +212,10 @@ public:
 //                       std::cout << " - " + std::to_string(inp) + " - " + std::to_string(outp) + " \n ";
                    }
                }
+
+               errTmp = (float *) malloc((out) * sizeof(float));
+               for (int i = 0; i < out; i++)
+               { errTmp[i] = 0; };
            }
            void toHiddenLayer(float *inputs)
            {
@@ -182,26 +234,36 @@ public:
            {
                return hidden;
            };
-           float calcOutError(float *targets, bool & showError )
+
+//        float absFh(float N) {
+//            if(N<0)N=N*-1;
+//            return N;
+//        };
+//        double absDh(double N) {
+//            if(N<0)N=N*-1;
+//            return N;
+//        }
+
+        float calcOutError(float *targets, bool & showError )
            {
                float errsum = 0.0;
-               errors = (float*) malloc((out)*sizeof(float));
+               errors = (float*) malloc((out)*sizeof(float)*4);
                for(int ou =0; ou < out; ou++)
                {
-                   float errTmp = (targets[ou] - hidden[ou]) * sigmoidasDerivate(hidden[ou]);
+                   float eTmp = (targets[ou] - hidden[ou]) * sigmoidasDerivate(hidden[ou]);
 
-                  /* if (!isnan(errTmp)) std::cout << " - " + std::to_string(errTmp]) + " - " + std::to_string(out) + " \n ";*/
-                   //if (errTmp > errLimitG)showError = true;
+                  /* if (!isnan(eTmp)) std::cout << " - " + std::to_string(eTmp]) + " - " + std::to_string(out) + " \n ";*/
+                   //if (eTmp > errLimitG)showError = true;
 
-                   errors[ou] = errTmp;
+                   errors[ou] = eTmp;
 
-                   errsum += absF(errTmp);
+                   errsum += absF(eTmp);
                }
                return errsum;
            };
            void calcHidError(float *targets,float **outWeights,int inS, int outS, bool & showError)
            {
-               errors = (float*) malloc((inS)*sizeof(float));
+               errors = (float*) malloc((inS)*sizeof(float)*4);
                for(int hid =0; hid < inS; hid++)
                {
                    errors[hid] = 0.0;
@@ -237,10 +299,12 @@ public:
     float ** backPropagate();
     void optimiseWay();
     float* processErrors(int i, bool & startOptimisation, bool showError, float totalE);
-    float ** train(float *in, float *targ);
+    float ** train(float *in, float *targ, bool optimize);
     void query(float *in);
     void printArray(float *arr, int iList, int s);
-    float * sumFloatMD(float * left,float *right,int inS);
+    void write_matrix_var1(string file_name);
+    void optimize_layer(int i);
+    void sumFloatMD(int inS);
     int nlCount;
     struct nnLay *list;
 
