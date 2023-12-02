@@ -120,7 +120,7 @@ public:
                std::cout << " randWeight " + std::to_string(randWeight) + " \n ";
 
 
-               hidden = (float*) malloc((out)*sizeof(float));//*2 malloc fail in counting mem
+               hidden = (float*) malloc((out)*sizeof(float));
 
                matrix = (float**) malloc((in+1)*sizeof(float)*2);//*2 malloc fail in counting mem
                for(int inp =0; inp < in+1; inp++)
@@ -240,12 +240,13 @@ public:
     float ** train(float *in, float *targ);
     void query(float *in);
     void printArray(float *arr, int iList, int s);
+    float * sumFloatMD(float * left,float *right,int inS);
+    int nlCount;
+    struct nnLay *list;
 
 private:
-    struct nnLay *list;
     int inputNeurons;
     int outputNeurons;
-    int nlCount;
     float errLimit;
     float errOptinizationLimit;
     float *inputs;

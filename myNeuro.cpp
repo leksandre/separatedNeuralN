@@ -89,6 +89,8 @@ float **  myNeuro::feedForwarding(bool mode_train)
             float outit = list[nlCount - 1].hidden[out];
             std::cout << std::to_string(outit) + "\n";
         }
+
+        //return empy array^ just for compatability
         float ** err3f;
         err3f = (float**) malloc(sizeof(float)*2);
         return err3f;
@@ -152,8 +154,13 @@ float* myNeuro::processErrors(int i, bool & startOptimisation, bool showError = 
     }
 
 
+// check size of list errors
 //    float * e1 = list[i].getErrors();
 //    cout<<','<<sizeof(e1)/sizeof(float) ;
+//    return e1;
+
+// empty response
+//    float * e1;
 //    return e1;
 
     return list[i].getErrors();
@@ -175,10 +182,12 @@ float ** myNeuro::backPropagate()
     //start return sum of erros... why? just interresting
     float sum_out_error = list[nlCount-1].calcOutError(targets, showError);//for 1 out layer (where 2 output neurons for our case)
 
-    //try to return array of errors up, and calculate them
+
+
+    //try to return array of errors up to start point, and calculate them
     //
     float ** err3;
-    err3 = (float**) malloc((nlCount*128)*sizeof(float));//*2 malloc fail in counting mem
+    err3 = (float**) malloc((nlCount)*sizeof(float));//*2 malloc fail in counting mem
     err3[nlCount-1] = processErrors(nlCount-1,startOptimisation,showError,sum_out_error);
     //
     /////
@@ -223,6 +232,17 @@ void myNeuro::query(float *in)
     feedForwarding(false);
     std::cout<<"\n_________________________________ end myNeuro cpp query\n";;
 }
+
+float * myNeuro::sumFloatMD(float * left,float *right,int inS)
+{
+    float * errors = (float*) malloc((inS)*sizeof(float));
+    for(int i=0; i < inS; i++)
+    {
+            errors[i] = left[i] * right[i];
+    }
+    return errors;
+};
+
 
 void myNeuro::printArray(float *arr, int iList, int s)
 {

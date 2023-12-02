@@ -265,6 +265,7 @@ int main(int argc, char *argv[])
     //QCoreApplication a(argc, argv);
 //   std::cout<<"\n_________________________________ start main 0\n";;;
     time_t start, end;
+    double time_taken;
     time(&start);
 
 
@@ -341,32 +342,51 @@ int main(int argc, char *argv[])
         std::cout << "\n________________start_train_________________\n";;
         iCycle = 0;
         int nTrainingSimple = 100000;
+        float ** errTotal;
+        float ** errTmp1;
+        float ** errTmp2;
         while (iCycle < nTrainingSimple and !couldoptimizeM)
         {
             if(!couldoptimizeM) iCycleTotal++;
+
             float ** errors1 = bb->train(abc, tar1);
+//            for(int i=(bb->nlCount-2);i>=0;i--)
+//                errTmp1[i] = bb->list[i].getErrors();
+
             float ** errors2 = bb->train(cba, tar2);
+//            for(int i=(bb->nlCount-2);i>=0;i--)
+//                errTmp2[i] = bb->list[i].getErrors();
+
+
+//            for(int i=(bb->nlCount-2);i>=0;i--)
+//                errTotal[i] = dd->sumFloatMD(errTmp1[i],errTmp2[i],bb->list[i].getOutCount())
+
             iCycle++;
 
-            int maxN = 0;
+
             if(couldoptimizeM)
             {
-                cout<<"size errors1 " << ( sizeof(errors1) / sizeof(errors1[1]) ) <<endl;
-                cout<<"size errors1_ " << ( sizeof(errors1) / sizeof(errors1[1][0]) ) <<endl;
-                cout<<"size errors1[0] " << ( sizeof(errors1[1]) / sizeof(errors1[1][0]) ) <<endl;
-                cout<<"size errors1[0][0] " << ( sizeof(errors1[1][0]) / sizeof(float) ) <<endl;
-
-                for(int i=0;i<2;i++)
+                cout<<endl<<"_______________show_errors_______________\n"<<endl;
+//                for(int i=(bb->nlCount-1);i>=0;i--) //skip "out" layer (nlCount-1) we could not modified it (a am too stupid for that)
+                for(int i=(bb->nlCount-2);i>=0;i--)
                 {
-                    for(int j=0;j<241;j++)
-                    {
-                        cout<<"\t"<<i<<":"<<j<<"\t"<<errors1[i][j];
-                        if(errors1[i][j]!=0)maxN=i;
-                    }
-                    cout<<endl<<"\n______________________________\n"<<endl;
-                }
-                std::cout << "maxN="<<maxN;
 
+                    cout<<" layer:"+std::to_string(i)+" ";
+                    bb->printArray(bb->list[i].getErrors(),i, bb->list[i].getOutCount());
+                    std::cout<<"\n";
+//  just trash
+//                    bb->printArray(errors1[i],0,300);
+//                    bb->printArray(errors2[i],0,300);
+//                    for(int j=0;j<241;j++)
+//                    {
+//                        cout<<"\t"<<i<<":"<<j<<"\t"<<errors1[i][j];
+//                        if(errors1[i][j]!=0)maxN=j;
+//                    }
+//                    std::cout << "\nmaxN="<<maxN;
+//                    cout<<endl<<"\n______________________________\n"<<endl;
+
+
+                }
             }
 
 
@@ -391,6 +411,14 @@ int main(int argc, char *argv[])
     std::cout<<"\n______________________________\n";
     std::cout<<"iCycle:"<<iCycle<<endl;
     std::cout<<"iCycleTotal:"<<iCycleTotal<<endl;
+
+    time(&end);
+    // Calculating total time taken by the program.
+
+    time_taken = double(end - start);
+    std::cout << "Time taken by program is : " << time_taken << "";
+    std::cout << " sec " << "\n";
+
 
     return 0;
 
@@ -537,7 +565,7 @@ int main(int argc, char *argv[])
 
     time(&end);
     // Calculating total time taken by the program.
-    double time_taken;
+
     time_taken = double(end - start);
     std::cout << "Time taken by program is : " << time_taken << "";
     std::cout << " sec " << "\n";
