@@ -11,7 +11,9 @@ float absF(float N) {
     if (N < 0)N = N * -1;
     return N;
 }
-
+ bool couldoptimizeM=false;
+ float iCycle=0;
+ float iCycleTotal=0;
 
 myNeuro::myNeuro()
 {

@@ -64,9 +64,9 @@ std::string toString(const T& value) {
 
 
 
-//bool couldoptimizeM = false;
-//int iCycle = 0;
-//int iCycleTotal = 0;
+ couldoptimizeM;
+ iCycle;
+ iCycleTotal;
 double absD(double N);
 float absF(float N);
 
