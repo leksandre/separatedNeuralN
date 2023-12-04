@@ -4,11 +4,11 @@
 
 
 //for linux
-#include "myNeuro.cpp"
+//#include "myNeuro.cpp"
 //#include <sys/time.h>
 
 //for win!!
-//#include "myNeuro.h"
+#include "myNeuro.h"
 #include <time.h>
 
 
@@ -348,9 +348,9 @@ int main(int argc, char *argv[])
 //        float ** errTmp2;
 
         float ** errTmp = (float**) malloc((bb->nlCount-1)*sizeof(float)*2);
-        float * e1;
+        float * e4 = 0;
         for(int i=(bb->nlCount-2);i>=0;i--)
-            errTmp[i] = e1;
+            errTmp[i] = e4;
 
         while (iCycle < nTrainingSimple and !couldoptimizeM)
         {

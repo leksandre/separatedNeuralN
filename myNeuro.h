@@ -47,9 +47,7 @@ const float errLimitG = 0.000005;
 
 const float errOptinizationLimitG = 0.0001; //0.00003; //0.000001; //0.00003;
 
-bool couldoptimizeM;
-int iCycle;
-int iCycleTotal;
+
 
 //for win!!
 //
@@ -66,15 +64,11 @@ std::string toString(const T& value) {
 
 
 
-
-double absD(double N) {
-    if(N<0)N=N*-1;
-    return N;
-}
-float absF(float N) {
-    if(N<0)N=N*-1;
-    return N;
-}
+//bool couldoptimizeM = false;
+//int iCycle = 0;
+//int iCycleTotal = 0;
+double absD(double N);
+float absF(float N);
 
 
 #define learnRate 0.1

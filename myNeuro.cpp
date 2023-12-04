@@ -3,6 +3,14 @@
 //using namespace std;
 #include <typeinfo>
 #define STRING(Value) #Value
+double absD(double N) {
+    if (N < 0)N = N * -1;
+    return N;
+}
+float absF(float N) {
+    if (N < 0)N = N * -1;
+    return N;
+}
 
 
 myNeuro::myNeuro()
