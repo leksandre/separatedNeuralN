@@ -185,7 +185,7 @@ float ** myNeuro::backPropagate()
     //
 //    float ** err3;
 //    err3 = (float**) malloc((nlCount)*sizeof(float));//*2 malloc fail in counting mem
-    float ** err3 = static_cast<float**> (malloc((nlCount)*sizeof(float)));
+    float ** err3 = static_cast<float**> (malloc((nlCount+1)*sizeof(float)));
     err3[nlCount-1] = processErrors(nlCount-1,startOptimisation,showError,sum_out_error);
     //
     /////
@@ -256,14 +256,14 @@ void myNeuro::sumFloatMD(int inS)
 
 void myNeuro::optimize_layer(int inS){
     int countOut = list[inS].getOutCount();
+    int countIn = list[inS].getInCount();
     int countOut1 = list[inS+1].getOutCount();
-//    int countIn = list[inS].getInCount();
-//    int countIn1 = list[inS+1].getInCount();
+    int countIn1 = list[inS+1].getInCount();
 if(rand()%30==9 )
     for(int inp =0; inp < countOut; inp++)
     {
         if(absF(list[inS].errTmp[inp])>1){
-            std::cout<<"truncMatrix layer:"<< inS <<" neuron:"<< inp  <<" neuron val:"<< fixed << list[inS].errTmp[inp]  <<"  countOut:"<< countOut <<"  countOuNext:"<< countOut1  <<"\n";;
+            std::cout<<"truncMatrix layer:"<< inS <<" neuron:"<< inp  <<" neuron val:"<< fixed << list[inS].errTmp[inp]  <<"  countOut:"<< countOut <<"  countInNex:"<< countIn1  <<"  countOuNext:"<< countOut1  <<"\n";;
             list[inS].truncMatrixOut(inp);
             list[inS+1].truncMatrixIn(inp);
             return;
