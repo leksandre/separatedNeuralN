@@ -255,15 +255,16 @@ void myNeuro::sumFloatMD(int inS)
 };
 
 void myNeuro::optimize_layer(int inS){
+    if(rand()%30==9)return;
+
     int countOut = list[inS].getOutCount();
     int countIn = list[inS].getInCount();
     int countOut1 = list[inS+1].getOutCount();
     int countIn1 = list[inS+1].getInCount();
-if(rand()%30==9 )
     for(int inp =0; inp < countOut; inp++)
     {
         if(absF(list[inS].errTmp[inp])>1){
-            std::cout<<"truncMatrix layer:"<< inS <<" neuron:"<< inp  <<" neuron val:"<< fixed << list[inS].errTmp[inp]  <<"  countOut:"<< countOut <<"  countInNex:"<< countIn1  <<"  countOuNext:"<< countOut1  <<"\n";;
+            std::cout<<"truncMatrix layer:"<< inS <<" neuron:"<< inp  <<" neuron val:"<< fixed << list[inS].errTmp[inp]  <<"  countOut:"<< countOut <<"  countInNexе:"<< countIn1  <<"  countOuNext:"<< countOut1  <<"\n";;
             list[inS].truncMatrixOut(inp);
             list[inS+1].truncMatrixIn(inp);
             return;
