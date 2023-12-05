@@ -597,7 +597,8 @@ int main(int argc, char *argv[])
 
     std::cout << "\n___________________calculate_RESULT_____________\n";;
 
-    for (int sample = 1; sample <= 10; ++sample) {
+    for (int sample = 1; sample <= 500; ++sample) {
+        if(rand()%100!=9 ) continue;
         ////cout << "Sample " << sample << endl;
         //// Getting (image, label)
         int labelN = input(true);

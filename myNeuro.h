@@ -30,7 +30,8 @@ static float absF(float N) {
 //#include <QtGlobal>
 //#include <QDebug>
 
-
+#include <chrono>
+#include <thread>
 
 #include <fstream>
 #include <cstring>
@@ -117,31 +118,46 @@ public:
            float *getErrorsM(){return errors;}
 
         void truncMatrixOut(int index) {
-               if (out<=index)return;
-               if (out<=1)return;
-            if(index==0){
-                index=1;
-            }
-            for (int ou = (index - 1); ou < (out - 1); ou++) {
-                for (int hid = 0; hid < in; hid++) {
-                    matrix[hid][ou] = matrix[hid][ou + 1];
-                }
+            if (out <= index)return;
+            if (out <= 1)return;
+            if (index == 0) {
+                index = 1;
             }
             out = out - 1;
+            if(index==(out+1)) return;
+            for (int ou = (index); ou < (out); ou++) {
+                for (int hid = 0; hid < in; hid++) {
+                    matrix[hid][ou] = matrix[hid][ou + 1];
+                    if (hid>15)continue;
+//                    std::cout<<"["<<hid<<"]["<<ou<<"] <=["<<hid<<"]["<<ou + 1<<"]"<<";";
+//                    std::this_thread::sleep_for(std::chrono::milliseconds(30));
+                }
+//                std::cout<<"\n";
+
+            //remove error of this neuron
+            errTmp[ou]=errTmp[ou+1];
+            }
+
         };
 
         void truncMatrixIn(int index) {
-            if (in<=index)return;
-            if (in<=1)return;
-            if(index==0){
-                index=1;
-            }
-            for (int ou = 0; ou < out; ou++) {
-                for (int hid = index - 1; hid < (in - 1); hid++) {
-                    matrix[hid][ou] = matrix[hid + 1][ou];
-                }
+            if (in <= index)return;
+            if (in <= 1)return;
+            if (index == 0) {
+                index = 1;
             }
             in = in - 1;
+            if(index==(in+1)) return;
+            for (int ou = 0; ou < (out); ou++) {
+                for (int hid = (index); hid < (in); hid++) {
+                    matrix[hid][ou] = matrix[hid + 1][ou];
+                    if (hid>15)continue;
+//                    std::cout<<"["<<hid<<"]["<<ou<<"] <=["<<hid+1<<"]["<<ou<<"]"<<";";
+//                    std::this_thread::sleep_for(std::chrono::milliseconds(30));
+                }
+//                std::cout<<"\n";
+            }
+
         };
 
            void updMatrix(float *enteredVal)
@@ -297,7 +313,7 @@ public:
 
     float ** feedForwarding(bool mode_train);
     float ** backPropagate();
-    void optimiseWay();
+    void optimiseWayAchieved(float sum_out_error);
     float* processErrors(int i, bool & startOptimisation, bool showError, float totalE);
     float ** train(float *in, float *targ, bool optimize);
     void query(float *in);

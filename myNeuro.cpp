@@ -94,9 +94,9 @@ float **  myNeuro::feedForwarding(bool mode_train)
 
 }
 
-void myNeuro::optimiseWay()
-{
-    //std::cout<<"\n_________________________________ optimiseWay!!!!!!!! \n";
+void myNeuro::optimiseWayAchieved(float sum_out_error) {
+    std::cout << "\n________________optimum way was achieved_________________\n";
+    cout << "\n sum of error on out layer:" << fixed << sum_out_error << "\n";
     //start it now or later?
     if (!is_optimizedM)is_optimizedM = true;
 }
@@ -203,9 +203,9 @@ float ** myNeuro::backPropagate()
     if(showError) {
         std::cout<<"\n";
     }
-
+    startOptimisation = (sum_out_error<errOptinizationLimit);//do it easy
     if(startOptimisation){
-        optimiseWay();
+        optimiseWayAchieved(sum_out_error);
     }
 
     //-------------------------------UPD-----WEIGHT---------
@@ -256,14 +256,17 @@ void myNeuro::sumFloatMD(int inS)
 
 void myNeuro::optimize_layer(int inS){
     int countOut = list[inS].getOutCount();
-//    int countIn = list[i].getInCount();
-if(rand()%100==9 )
+    int countOut1 = list[inS+1].getOutCount();
+//    int countIn = list[inS].getInCount();
+//    int countIn1 = list[inS+1].getInCount();
+if(rand()%30==9 )
     for(int inp =0; inp < countOut; inp++)
     {
         if(absF(list[inS].errTmp[inp])>1){
-            std::cout<<"truncMatrix layer:"<< inS <<" neuron:"<< inp  <<" neuron val:"<< list[inS].errTmp[inp]  <<"  countOut:"<< countOut <<"\n";;
+            std::cout<<"truncMatrix layer:"<< inS <<" neuron:"<< inp  <<" neuron val:"<< fixed << list[inS].errTmp[inp]  <<"  countOut:"<< countOut <<"  countOuNext:"<< countOut1  <<"\n";;
             list[inS].truncMatrixOut(inp);
             list[inS+1].truncMatrixIn(inp);
+            return;
         }
     }
 }
