@@ -1,13 +1,14 @@
 #ifndef MY_FUnC_HEADER_
 #define MY_FUnC_HEADER_
-bool is_optimizedM;
+
+extern bool is_optimizedM;
 
 //switcher
-bool allow_optimisation_transform = true;
+extern bool allow_optimisation_transform;
 //bool allow_optimisation_transform = false;
 
-int iCycle;
-int iCycleTotal;
+extern int iCycle;
+extern int iCycleTotal;
 
 //static
 static double absD(double N) {
@@ -46,10 +47,10 @@ static float absF(float N) {
 
 using namespace std;
 // Training image file name
-const string training_image_fn = "mnist/train-images.idx3-ubyte";
+const string training_image_fn = "C:\\mnist\\train-images.idx3-ubyte";
 
 // Training label file name
-const string training_label_fn = "mnist/train-labels.idx1-ubyte";
+const string training_label_fn = "C:\\mnist\\train-labels.idx1-ubyte";
 
 // Weights file name
 const string model_fn = "model-neural-network.dat";

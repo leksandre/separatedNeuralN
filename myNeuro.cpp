@@ -4,7 +4,14 @@
 #include <typeinfo>
 #define STRING(Value) #Value
 
+bool is_optimizedM;
 
+//switcher
+bool allow_optimisation_transform = false;
+//bool allow_optimisation_transform = false;
+
+int iCycle;
+int iCycleTotal;
 
 myNeuro::myNeuro()
 {

@@ -4,11 +4,11 @@
 
 
 //for linux
-#include "myNeuro.cpp"
+//#include "myNeuro.cpp"
 //#include <sys/time.h>
 
 //for win!!
-//#include "myNeuro.h"
+#include "myNeuro.h"
 #include <time.h>
 
 
