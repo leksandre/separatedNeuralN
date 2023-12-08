@@ -126,7 +126,7 @@ float* myNeuro::processErrors(int i, bool & startOptimisation, bool showError = 
 
     if (showError){
         std::cout << " layer:" + std::to_string(i);
-        std::cout << " error:" + std::to_string(err1);
+        std::cout << " error:" << fixed << (err1);
         //std::cout << " sum_delta_error:" + std::to_string(totalE);
         std::cout << " (optimisation:" + std::to_string((startOptimisation) ) + ")" ;
         std::cout <<  " (len:" + std::to_string(lenLayer ) + ")";

@@ -2,13 +2,19 @@
 //#include <QDebug>
 //#include <QTime>
 
+//switcher
+bool allow_optimisation_transform = true;
+//bool allow_optimisation_transform = false;
+bool is_optimizedM;
+int iCycle;
+int iCycleTotal;
 
 //for linux
-#include "myNeuro.cpp"
+//#include "myNeuro.cpp"
 //#include <sys/time.h>
 
 //for win!!
-//#include "myNeuro.h"
+#include "myNeuro.h"
 #include <time.h>
 
 
@@ -16,6 +22,42 @@
 ifstream image;
 ifstream label;
 ofstream report;
+
+
+
+#include <sys/stat.h>
+
+#include <stdio.h>
+#include <string>
+#include <fstream>
+
+inline bool exists_test0(const std::string& name) {
+    ifstream f(name.c_str());
+    return f.good();
+}
+
+//inline bool exists_test1(const std::string& name) {
+//    if (FILE* file = fopen(name.c_str(), "r")) {
+//        fclose(file);
+//        return true;
+//    }
+//    else {
+//        return false;
+//    }
+//}
+
+//inline bool exists_test2(const std::string& name) {
+//    return (access(name.c_str(), F_OK) != -1);
+//}
+
+inline bool exists_test3(const std::string& name) {
+    struct stat buffer;
+    return (stat(name.c_str(), &buffer) == 0);
+}
+
+
+
+
 
 
 
@@ -43,6 +85,12 @@ double sigmoid(double x) {
     return 1.0 / (1.0 + exp(-x));
 }
 
+//bool is_file_exist(const char* fileName)
+bool is_file_exist(const std::string& fileName)
+{
+    std::ifstream infile(fileName.c_str());
+    return infile.good();
+}
 
 void init_array() {
     // Layer 1 - Layer 2 = Input layer - Hidden layer
@@ -330,12 +378,12 @@ int main(int argc, char *argv[])
         std::cout << "\n________________target1_________________\n";;
         for (int out = 0; out < 10; out++) {
             std::cout << "outputNeuron " + std::to_string(out) + ":";
-            std::cout << std::to_string(tar1[out]) + "\n";
+            std::cout << fixed << (tar1[out]) << "\n";
         }
         std::cout << "\n________________target2_________________\n";;
         for (int out = 0; out < 10; out++) {
             std::cout << "outputNeuron " + std::to_string(out) + ":";
-            std::cout << std::to_string(tar2[out]) + "\n";
+            std::cout << fixed << (tar2[out]) << "\n";
         }
 
         //--------------------------------NN---------WORKING---------------
@@ -466,15 +514,39 @@ int main(int argc, char *argv[])
 
 
 
+    if (!exists_test0(training_image_fn)) {
+        std::cout << "\n________________training_image_fn_0________________\n";;
+        std::cout << training_image_fn;;
+        std::cout << "\n";
+        std::cout << training_image_fn.c_str();;
+        std::cout << "\n_______________not exist!!!!_________________\n";;
+        //return false;
+    }
 
+    if (!exists_test3(training_image_fn)) {
+        std::cout << "\n________________training_image_fn_3________________\n";;
+        std::cout << training_image_fn;;
+        std::cout << "\n";
+        std::cout << training_image_fn.c_str();;
+        std::cout << "\n_______________not exist!!!!_________________\n";;
+        //return false;
+    }
 
+    if (!is_file_exist(training_image_fn)) {
+        std::cout << "\n________________training_image_fn_classic________________\n";;
+        std::cout << training_image_fn;;;
+        std::cout << "\n";
+        std::cout << training_image_fn.c_str();;;
+        std::cout << "\n_______________not exist!!!!_________________\n";;
 
+    }
 
-
-
-
-
-
+    if (!is_file_exist(training_label_fn.c_str())) {
+        std::cout << "\n________________training_label_fn_________________\n";;
+        std::cout << training_label_fn;;
+        std::cout << "\n_______________not exist!!!!_________________\n";;
+        return false;
+    }
 
     iCycle = 10;//не показывать в начале лог ошибок
     iCycleTotal = 0;
@@ -494,10 +566,10 @@ int main(int argc, char *argv[])
 
     init_array();
     std::cout << "\n________________start_train_________________\n";;
+    int nTrainingSimple = 100000;
 
 
-
-    while(!is_optimizedM){
+    while(!is_optimizedM && (iCycleTotal < nTrainingSimple)){
         for (int sample = 1; sample <= nTraining; ++sample) {
 
             if(!is_optimizedM)iCycle++;
