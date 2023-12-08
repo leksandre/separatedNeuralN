@@ -2,12 +2,7 @@
 //#include <QDebug>
 //#include <QTime>
 
-//switcher
-bool allow_optimisation_transform = true;
-//bool allow_optimisation_transform = false;
-bool is_optimizedM;
-int iCycle;
-int iCycleTotal;
+
 
 //for linux
 //#include "myNeuro.cpp"
@@ -569,7 +564,7 @@ int main(int argc, char *argv[])
     int nTrainingSimple = 100000;
 
 
-    while(!is_optimizedM && (iCycleTotal < nTrainingSimple)){
+    while(!is_optimizedM){// && (iCycleTotal < nTrainingSimple)
         for (int sample = 1; sample <= nTraining; ++sample) {
 
             if(!is_optimizedM)iCycle++;
