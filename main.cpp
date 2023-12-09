@@ -323,20 +323,21 @@ void check(int value)
     }
     cout << flag << "\n";
     glutPostRedisplay();
-    glutTimerFunc(1000, check, 0);
+    glutTimerFunc(100, check, 0);
+
 }
 
 void highlight_lines(float x, float y, float z, float live_transparency_line)
 {
     float a, b, c;
-    for (a = 0; a <= 0.5; a = a + 0.1)
+    for (a = 0; a <= 0.9; a = a + 0.1)
     {
-        for (b = 0; b <= 0.5; b = b + 0.1)
+        for (b = 0; b <= 0.9; b = b + 0.1)
         {
-            for (c = 0; c <= 0.5; c = c + 0.1)
+            for (c = 0; c <= 0.9; c = c + 0.1)
             {
                 //First Hidden Layer Plane 1 
-                glPointSize(3.0);
+                glPointSize(12.0);
                 glBegin(GL_POINTS);
                 glColor4f(1.0, 1.0, 1.0, 0.05);
                 glVertex3f(0.1 + b, 0.1 + c, 0.4);
@@ -352,7 +353,7 @@ void highlight_lines(float x, float y, float z, float live_transparency_line)
                 //First Hidden Layer Plane 4
                 if (c < 0.44)
                 {
-                    glPointSize(3.0);
+                    glPointSize(12.0);
                     glBegin(GL_POINTS);
                     glVertex3f(x, y, z);
                     glVertex3f(0.17 + b, 0.16 + c, 0.44);
@@ -367,7 +368,7 @@ void highlight_lines(float x, float y, float z, float live_transparency_line)
                 }
 
                 //Second Hidden Layer Plane 1 
-                glPointSize(3.0);
+                glPointSize(12.0);
                 glBegin(GL_POINTS);
                 glColor4f(1.0, 1.0, 1.0, 0.05);
                 glVertex3f(0.1 + b, 0.1 + c, 0.8);
@@ -409,17 +410,17 @@ void displaynetwork(void)
     glTranslatef(-1.0, -0.75, -3.5); // -1.6 for scaling of 2.3
     // Red color used to draw.
     glColor3f(0.8, 0.2, 0.1);
-    glRotatef(yRotated, 0.0, 1.0, 0.0);
-    glScalef(2.0, 2.0, 2.0);
+    glRotatef(yRotated, 1.0, 1.0, 1.0);
+    glScalef(1.0, 1.0, 1.0);
 
     float dead_transparency_line = 0.08;
     float live_transparency_line = 0.15;
     float a, b, c;
-    for (a = 0; a <= 0.5; a = a + 0.1)
+    for (a = 0; a <= 0.9; a = a + 0.1)
     {
-        for (b = 0; b <= 0.5; b = b + 0.1)
+        for (b = 0; b <= 0.9; b = b + 0.1)
         {
-            for (c = 0; c <= 0.5; c = c + 0.1)
+            for (c = 0; c <= 0.9; c = c + 0.1)
             {
                 //Input Layer 
                 glPointSize(15.0);
@@ -429,7 +430,7 @@ void displaynetwork(void)
                 glEnd();
 
                 //First Hidden Layer Plane 1 
-                glPointSize(3.0);
+                glPointSize(12.0);
                 glBegin(GL_POINTS);
                 glColor4f(1.0, 1.0, 1.0, 0.05);
                 glVertex3f(0.1 + b, 0.1 + c, 0.4);
@@ -444,7 +445,7 @@ void displaynetwork(void)
                 //First Hidden Layer Plane 2
                 if (c < 0.47)
                 {
-                    glPointSize(3.0);
+                    glPointSize(12.0);
                     glBegin(GL_POINTS);
                     glVertex3f(0.1 + b, 0.1 + a, 0.0);
                     glVertex3f(0.13 + b, 0.13 + c, 0.42);
@@ -458,7 +459,7 @@ void displaynetwork(void)
                 }
 
                 //First Hidden Layer Plane 3
-                glPointSize(3.0);
+                glPointSize(12.0);
                 glBegin(GL_POINTS);
                 glVertex3f(0.1 + b, 0.1 + a, 0.0);
                 glVertex3f(0.07 + b, 0.07 + c, 0.42);
@@ -474,7 +475,7 @@ void displaynetwork(void)
                 //First Hidden Layer Plane 4
                 if (c < 0.44)
                 {
-                    glPointSize(3.0);
+                    glPointSize(12.0);
                     glBegin(GL_POINTS);
                     glVertex3f(0.1 + b, 0.1 + a, 0.0);
                     glVertex3f(0.17 + b, 0.16 + c, 0.44);
@@ -489,7 +490,7 @@ void displaynetwork(void)
                 }
 
                 //Second Hidden Layer Plane 1 
-                glPointSize(3.0);
+                glPointSize(12.0);
                 glBegin(GL_POINTS);
                 glColor4f(1.0, 1.0, 1.0, 0.05);
                 glVertex3f(0.1 + b, 0.1 + c, 0.8);
@@ -505,7 +506,7 @@ void displaynetwork(void)
                 //Second Hidden Layer Plane 2
                 if (c < 0.47)
                 {
-                    glPointSize(3.0);
+                    glPointSize(12.0);
                     glBegin(GL_POINTS);
                     glVertex3f(0.1 + b, 0.1 + a, 0.42);
                     glVertex3f(0.13 + b, 0.13 + c, 0.82);
@@ -520,7 +521,7 @@ void displaynetwork(void)
                 }
 
                 //Output Layer
-                glPointSize(3.0);
+                glPointSize(12.0);
                 glBegin(GL_POINTS);
                 glColor4f(1.0, 1.0, 1.0, 0.05);
                 glVertex3f(0.1 + b, 0.35, 1.2);
