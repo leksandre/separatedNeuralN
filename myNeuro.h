@@ -47,10 +47,12 @@ static float absF(float N) {
 
 using namespace std;
 // Training image file name
-const string training_image_fn = "C:\\mnist\\train-images.idx3-ubyte";
+//const string training_image_fn = "C:\\mnist\\train-images.idx3-ubyte";//win
+const string training_image_fn = "mnist/train-images.idx3-ubyte";//lin
 
 // Training label file name
-const string training_label_fn = "C:\\mnist\\train-labels.idx1-ubyte";
+//const string training_label_fn = "C:\\mnist\\train-labels.idx1-ubyte";//win
+const string training_label_fn = "mnist/train-labels.idx1-ubyte";//lin
 
 // Weights file name
 const string model_fn = "model-neural-network.dat";

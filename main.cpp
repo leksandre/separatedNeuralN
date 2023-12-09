@@ -4,11 +4,11 @@
 
 
 //for linux
-//#include "myNeuro.cpp"
+#include "myNeuro.cpp"
 //#include <sys/time.h>
 
 //for win!!
-#include "myNeuro.h"
+//#include "myNeuro.h"
 #include <time.h>
 
 
@@ -274,11 +274,12 @@ int main(int argc, char *argv[])
 
     myNeuro* bb = new myNeuro();
     iCycleTotal = 0;
+//    start_varian1 = false;
+    bool start_varian1 = true;
 
 
+    if (start_varian1) {
 
-    if (false) {
-//    if (true) {
 
 
 
