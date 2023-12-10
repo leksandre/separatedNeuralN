@@ -32,7 +32,10 @@ ifstream label;
 ofstream report;
 
 
+bool start_visualisation = true;
+myNeuro* bb;
 
+float pointOfCentre = 0.5;
 
 const int epochs = 512;
 const double learning_rate = 1e-3;
@@ -327,27 +330,29 @@ void check(int value)
 
 }
 
+
 void highlight_lines(float x, float y, float z, float live_transparency_line)
 {
+    return;
     float a, b, c;
-    for (a = 0; a <= 0.9; a = a + 0.1)
+    for (a = 0; a <= 1; a = a + 0.1)
     {
-        for (b = 0; b <= 0.9; b = b + 0.1)
+        for (b = 0; b <= 1; b = b + 0.1)
         {
-            for (c = 0; c <= 0.9; c = c + 0.1)
+            for (c = 0; c <= 1; c = c + 0.1)
             {
                 //First Hidden Layer Plane 1 
                 glPointSize(12.0);
                 glBegin(GL_POINTS);
-                glColor4f(1.0, 1.0, 1.0, 0.05);
+                glColor4f(1.0, 1.0, 1.0, 0.95);
                 glVertex3f(0.1 + b, 0.1 + c, 0.4);
-                glVertex3f(0.1 + b, 0.1 + c, 0.4);
+                //glVertex3f(0.1 + b, 0.1 + c, 0.4);
                 glEnd();
                 glBegin(GL_LINE_LOOP);
                 glColor4f(1.0, 1.0, 1.0, live_transparency_line);
                 glVertex3f(x, y, z);
                 glVertex3f(0.1 + b, 0.1 + c, 0.4);
-                glVertex3f(0.1 + b, 0.1 + c, 0.4);
+                //glVertex3f(0.1 + b, 0.1 + c, 0.4);
                 glEnd();
 
                 //First Hidden Layer Plane 4
@@ -356,42 +361,42 @@ void highlight_lines(float x, float y, float z, float live_transparency_line)
                     glPointSize(12.0);
                     glBegin(GL_POINTS);
                     glVertex3f(x, y, z);
-                    glVertex3f(0.17 + b, 0.16 + c, 0.44);
-                    glVertex3f(0.17 + b, 0.16 + c, 0.44);
+                    //glVertex3f(0.17 + b, 0.16 + c, 0.44);
+                    //glVertex3f(0.17 + b, 0.16 + c, 0.44);
                     glEnd();
                     glBegin(GL_LINE_LOOP);
                     glColor4f(1.0, 1.0, 1.0, live_transparency_line);
                     glVertex3f(x, y, z);
-                    glVertex3f(0.17 + b, 0.16 + c, 0.44);
-                    glVertex3f(0.17 + b, 0.16 + c, 0.44);
+                    //glVertex3f(0.17 + b, 0.16 + c, 0.44);
+                    //glVertex3f(0.17 + b, 0.16 + c, 0.44);
                     glEnd();
                 }
 
                 //Second Hidden Layer Plane 1 
                 glPointSize(12.0);
                 glBegin(GL_POINTS);
-                glColor4f(1.0, 1.0, 1.0, 0.05);
+                glColor4f(1.0, 1.0, 1.0, 0.95);
                 glVertex3f(0.1 + b, 0.1 + c, 0.8);
-                glVertex3f(0.1 + b, 0.1 + c, 0.8);
+                //glVertex3f(0.1 + b, 0.1 + c, 0.8);
                 glEnd();
                 glBegin(GL_LINE_LOOP);
                 glColor4f(1.0, 1.0, 1.0, live_transparency_line);
                 glVertex3f(0.1 + b, 0.1 + a, 0.4);
                 glVertex3f(0.1 + b, 0.1 + c, 0.8);
-                glVertex3f(0.1 + b, 0.1 + c, 0.8);
+                //glVertex3f(0.1 + b, 0.1 + c, 0.8);
                 glEnd();
 
                 //output layer 
                 glPointSize(20.0);
                 glBegin(GL_POINTS);
                 glColor4f(0.0, 0.0, 1.0, 1.0);
-                glVertex3f(0.2, 0.35, 1.2);
+                glVertex3f(0.2, pointOfCentre, 1.2);
                 glEnd();
                 glBegin(GL_LINE_LOOP);
                 glColor4f(1.0, 1.0, 1.0, live_transparency_line);
                 glVertex3f(0.1 + b, 0.1 + a, 0.8);
-                glVertex3f(0.2, 0.35, 1.2);
-                glVertex3f(0.2, 0.35, 1.2);
+                glVertex3f(0.2, pointOfCentre, 1.2);
+                //glVertex3f(0.2, pointOfCentre, 1.2);
                 glEnd();
 
             }
@@ -416,29 +421,41 @@ void displaynetwork(void)
     float dead_transparency_line = 0.08;
     float live_transparency_line = 0.15;
     float a, b, c;
-    for (a = 0; a <= 0.9; a = a + 0.1)
+    //int l1, l2, l3, l4;
+    //int m1, m2, m3, m4;
+    //m1 = 28 * 28;
+    //m2 = 28 * 10;
+    //m3 = 128;
+    //m4 = 10;
+    for (a = 0; a <= 1; a = a + 0.1)
     {
-        for (b = 0; b <= 0.9; b = b + 0.1)
+        for (b = 0; b <= 1; b = b + 0.1)
         {
-            for (c = 0; c <= 0.9; c = c + 0.1)
+            for (c = 0; c <= 1; c = c + 0.1)
             {
                 //Input Layer 
                 glPointSize(15.0);
                 glBegin(GL_POINTS);
-                glColor4f(1.0, 1.0, 1.0, 0.05);
+                glColor4f(1.0, 1.0, 1.0, 0.95);
                 glVertex3f(0.1 + b, 0.1 + a, 0.0);
                 glEnd();
 
                 //First Hidden Layer Plane 1 
                 glPointSize(12.0);
                 glBegin(GL_POINTS);
-                glColor4f(1.0, 1.0, 1.0, 0.05);
+                glColor4f(0.0, 1.0, 0.0, 0.95);
                 glVertex3f(0.1 + b, 0.1 + c, 0.4);
                 glEnd();
+
                 glBegin(GL_LINE_LOOP);
                 glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
                 glVertex3f(0.1 + b, 0.1 + a, 0.0);
                 glVertex3f(0.1 + b, 0.1 + c, 0.4);
+                glEnd();
+
+                glBegin(GL_LINE_LOOP);
+                glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
+                glVertex3f(0.1 + a, 0.1 + c, 0.0);
                 glVertex3f(0.1 + b, 0.1 + c, 0.4);
                 glEnd();
 
@@ -448,13 +465,13 @@ void displaynetwork(void)
                     glPointSize(12.0);
                     glBegin(GL_POINTS);
                     glVertex3f(0.1 + b, 0.1 + a, 0.0);
-                    glVertex3f(0.13 + b, 0.13 + c, 0.42);
+                    //glVertex3f(0.13 + b, 0.13 + c, 0.42);
                     glEnd();
                     glBegin(GL_LINE_LOOP);
                     glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
                     glVertex3f(0.1 + b, 0.1 + a, 0.0);
-                    glVertex3f(0.13 + b, 0.13 + c, 0.42);
-                    glVertex3f(0.13 + b, 0.13 + c, 0.42);
+                    //glVertex3f(0.13 + b, 0.13 + c, 0.42);
+                    //glVertex3f(0.13 + b, 0.13 + c, 0.42);
                     glEnd();
                 }
 
@@ -462,14 +479,14 @@ void displaynetwork(void)
                 glPointSize(12.0);
                 glBegin(GL_POINTS);
                 glVertex3f(0.1 + b, 0.1 + a, 0.0);
-                glVertex3f(0.07 + b, 0.07 + c, 0.42);
-                glVertex3f(0.07 + b, 0.07 + c, 0.42);
+                //glVertex3f(0.07 + b, 0.07 + c, 0.42);
+                //glVertex3f(0.07 + b, 0.07 + c, 0.42);
                 glEnd();
                 glBegin(GL_LINE_LOOP);
                 glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
                 glVertex3f(0.1 + b, 0.1 + a, 0.0);
-                glVertex3f(0.07 + b, 0.07 + c, 0.42);
-                glVertex3f(0.07 + b, 0.07 + c, 0.42);
+                //glVertex3f(0.07 + b, 0.07 + c, 0.42);
+                //glVertex3f(0.07 + b, 0.07 + c, 0.42);
                 glEnd();
 
                 //First Hidden Layer Plane 4
@@ -478,29 +495,34 @@ void displaynetwork(void)
                     glPointSize(12.0);
                     glBegin(GL_POINTS);
                     glVertex3f(0.1 + b, 0.1 + a, 0.0);
-                    glVertex3f(0.17 + b, 0.16 + c, 0.44);
-                    glVertex3f(0.17 + b, 0.16 + c, 0.44);
+                    //glVertex3f(0.17 + b, 0.16 + c, 0.44);
+                    //glVertex3f(0.17 + b, 0.16 + c, 0.44);
                     glEnd();
                     glBegin(GL_LINE_LOOP);
                     glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
                     glVertex3f(0.1 + b, 0.1 + a, 0.0);
-                    glVertex3f(0.17 + b, 0.16 + c, 0.44);
-                    glVertex3f(0.17 + b, 0.16 + c, 0.44);
+                    //glVertex3f(0.17 + b, 0.16 + c, 0.44);
+                    //glVertex3f(0.17 + b, 0.16 + c, 0.44);
                     glEnd();
                 }
 
                 //Second Hidden Layer Plane 1 
                 glPointSize(12.0);
                 glBegin(GL_POINTS);
-                glColor4f(1.0, 1.0, 1.0, 0.05);
+                glColor4f(0.0, 0.0, 1.0, 0.95);
                 glVertex3f(0.1 + b, 0.1 + c, 0.8);
-                glVertex3f(0.1 + b, 0.1 + c, 0.8);
+                //glVertex3f(0.1 + b, 0.1 + c, 0.8);
                 glEnd();
                 glBegin(GL_LINE_LOOP);
                 glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
                 glVertex3f(0.1 + b, 0.1 + a, 0.4);
                 glVertex3f(0.1 + b, 0.1 + c, 0.8);
+                glEnd();
+
+                glBegin(GL_LINE_LOOP);
+                glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
                 glVertex3f(0.1 + b, 0.1 + c, 0.8);
+                glVertex3f(0.1 + a, 0.1 + c, 0.4);
                 glEnd();
 
                 //Second Hidden Layer Plane 2
@@ -508,30 +530,30 @@ void displaynetwork(void)
                 {
                     glPointSize(12.0);
                     glBegin(GL_POINTS);
-                    glVertex3f(0.1 + b, 0.1 + a, 0.42);
-                    glVertex3f(0.13 + b, 0.13 + c, 0.82);
-                    glVertex3f(0.13 + b, 0.13 + c, 0.82);
+                    //glVertex3f(0.1 + b, 0.1 + a, 0.42);
+                    //glVertex3f(0.13 + b, 0.13 + c, 0.82);
+                    //glVertex3f(0.13 + b, 0.13 + c, 0.82);
                     glEnd();
                     glBegin(GL_LINE_LOOP);
                     glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
                     glVertex3f(0.1 + b, 0.1 + a, 0.0);
-                    glVertex3f(0.13 + b, 0.13 + c, 0.82);
-                    glVertex3f(0.13 + b, 0.13 + c, 0.82);
+                    //glVertex3f(0.13 + b, 0.13 + c, 0.82);
+                    //glVertex3f(0.13 + b, 0.13 + c, 0.82);
                     glEnd();
                 }
 
                 //Output Layer
                 glPointSize(12.0);
                 glBegin(GL_POINTS);
-                glColor4f(1.0, 1.0, 1.0, 0.05);
-                glVertex3f(0.1 + b, 0.35, 1.2);
-                glVertex3f(0.1 + b, 0.35, 1.2);
+                glColor4f(1.0, 0.0, 0.0, 0.95);
+                glVertex3f(0.1 + b, pointOfCentre, 1.2);
+                //glVertex3f(0.1 + b, pointOfCentre, 1.2);
                 glEnd();
                 glBegin(GL_LINE_LOOP);
                 glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
                 glVertex3f(0.1 + b, 0.1 + c, 0.8);
-                glVertex3f(0.1 + a, 0.35, 1.2);
-                glVertex3f(0.1 + a, 0.35, 1.2);
+                glVertex3f(0.1 + a, pointOfCentre, 1.2);
+                //glVertex3f(0.1 + a, pointOfCentre, 1.2);
                 glEnd();
             }
         }
@@ -596,68 +618,6 @@ void render()
 
 int main(int argc, char *argv[])
 {
-    //for openGl visulaise
-    // 
-    //Initialize GLUT
-    glutInit(&argc, argv);
-    //double buffering used to avoid flickering problem in animation
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    // window size
-    glutInitWindowSize(1350, 950);
-    glutInitWindowPosition(0, 0);
-    // create the window 
-    glutCreateWindow("network Rotating Animation");
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    yRotated = 40;
-    glClearColor(0.0, 0.0, 0.0, 0.0);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //Assign  the function used in events
-    glutDisplayFunc(displaynetwork);
-    glutReshapeFunc(reshapenetwork);
-    glutIdleFunc(idlenetwork);
-    //Let start glut loop
-    glutTimerFunc(100, check, 0);
-    glutMainLoop();
-    return 0;
-
-
-
-
-
-
-
-
-
-
-
-    //for openGl visulaise // empty window
-    //
-    glutInit(&argc, argv);  // Initialize GLUT
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);   // Set up some memory buffers for our display
-    glutInitWindowSize(900, 700);  // Set the window size
-    glutCreateWindow("Tactical_Hacker, GL");   // Create the window with the title "Tactical_Hacker,GL"
-    glutReshapeFunc(changeViewPort);  // Bind the two functions (above) to respond when necessary
-    glutDisplayFunc(render);
-    // Very important!  This initializes the entry points in the OpenGL driver so we can call all the functions in the API.
-    GLenum err = glewInit();
-    if (GLEW_OK != err) {
-        fprintf(stderr, "GLEW error");
-        return 1;
-    }
-    glutMainLoop();
-    return 0;
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -668,10 +628,83 @@ int main(int argc, char *argv[])
     time(&start);
 
 
-    myNeuro* bb = new myNeuro();
+   bb = new myNeuro();
     iCycleTotal = 0;
-//    start_varian1 = false;
+    //    start_varian1 = false;
     bool start_varian1 = true;
+
+
+
+
+
+    if (start_visualisation) {
+        //for openGl visulaise
+        // 
+        //Initialize GLUT
+        glutInit(&argc, argv);
+        //double buffering used to avoid flickering problem in animation
+        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+        // window size
+        glutInitWindowSize(1350, 950);
+        glutInitWindowPosition(0, 0);
+        // create the window 
+        glutCreateWindow("network Rotating Animation");
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        yRotated = 40;
+        glClearColor(0.0, 0.0, 0.0, 0.0);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        //Assign  the function used in events
+        glutDisplayFunc(displaynetwork);
+        glutReshapeFunc(reshapenetwork);
+        glutIdleFunc(idlenetwork);
+        //Let start glut loop
+        glutTimerFunc(100, check, 0);
+        glutMainLoop();
+        return 0;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+    ////for openGl visulaise // empty window
+    ////
+    //glutInit(&argc, argv);  // Initialize GLUT
+    //glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);   // Set up some memory buffers for our display
+    //glutInitWindowSize(900, 700);  // Set the window size
+    //glutCreateWindow("Tactical_Hacker, GL");   // Create the window with the title "Tactical_Hacker,GL"
+    //glutReshapeFunc(changeViewPort);  // Bind the two functions (above) to respond when necessary
+    //glutDisplayFunc(render);
+    //// Very important!  This initializes the entry points in the OpenGL driver so we can call all the functions in the API.
+    //GLenum err = glewInit();
+    //if (GLEW_OK != err) {
+    //    fprintf(stderr, "GLEW error");
+    //    return 1;
+    //}
+    //glutMainLoop();
+    //return 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     if (start_varian1) {
