@@ -32,7 +32,7 @@ ifstream label;
 ofstream report;
 
 
-bool start_visualisation = true;
+bool start_visualisation = false;
 myNeuro* bb;
 
 float pointOfCentre = 0.5;
@@ -748,23 +748,25 @@ int main(int argc, char *argv[])
         float* tar2 = new float[10];
         tar2[0] = 0.99;
         tar2[1] = 0.01;
-        tar1[2] = 0;
-        tar1[3] = 0;
-        tar1[4] = 0;
-        tar1[5] = 0;
-        tar1[6] = 0;
-        tar1[7] = 0;
-        tar1[8] = 0;
-        tar1[9] = 0;
+        tar2[2] = 0;
+        tar2[3] = 0;
+        tar2[4] = 0;
+        tar2[5] = 0;
+        tar2[6] = 0;
+        tar2[7] = 0;
+        tar2[8] = 0;
+        tar2[9] = 0;
 
         std::cout << "\n________________target1_________________\n";;
         for (int out = 0; out < 10; out++) {
             std::cout << "outputNeuron " + std::to_string(out) + ":";
+            std::cout << (tar1[out]) ;
             std::cout << std::to_string(tar1[out]) + "\n";
         }
         std::cout << "\n________________target2_________________\n";;
         for (int out = 0; out < 10; out++) {
             std::cout << "outputNeuron " + std::to_string(out) + ":";
+            std::cout << (tar2[out]) ;
             std::cout << std::to_string(tar2[out]) + "\n";
         }
 
