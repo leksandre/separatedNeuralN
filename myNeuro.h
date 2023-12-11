@@ -22,6 +22,10 @@ static float absF(float N) {
 }
 #endif
 
+struct Point {
+    double x;
+    double y;
+};
 
 #ifndef MYNEURO_H
 #define MYNEURO_H
@@ -38,7 +42,6 @@ static float absF(float N) {
 #include <string>
 #include <cstdio>
 #include <cstdlib>
-//#include <cmath>
 #include <vector>
 #include <set>
 #include <iterator>
@@ -46,6 +49,13 @@ static float absF(float N) {
 
 
 using namespace std;
+
+#include <iostream>
+#include <vector>
+
+
+//#include <cmath>// does not need
+
 // Training image file name
 //const string training_image_fn = "C:\\mnist\\train-images.idx3-ubyte";//win
 const string training_image_fn = "mnist/train-images.idx3-ubyte";//lin
@@ -109,6 +119,8 @@ public:
 
            bool is_optimizedL;
            float * errTmp;
+           std::vector<Point> pointsIn;
+           std::vector<Point> pointsOut;
            float ** matrix;
            float * hidden;
            float * errors;
@@ -159,7 +171,29 @@ public:
                    matrix[in][ou] += (learnRate * errors[ou]);
                }
            };
-           void setIO(int inputs, int outputs)
+            std::vector<Point> distributePointsEvenly(int numPoints, double areaWidth, double areaHeight) {
+                std::vector<Point> points;
+                int numRows = sqrt(numPoints);
+                int numCols = ceil(static_cast<double>(numPoints) / numRows);
+                double deltaX = areaWidth / (numCols + 1);
+                double deltaY = areaHeight / (numRows + 1);
+                double startX = deltaX;
+                double startY = deltaY;
+
+                for (int row = 0; row < numRows; ++row) {
+                    for (int col = 0; col < numCols; ++col) {
+                        if (points.size() < numPoints) {
+                            Point point;
+                            point.x =( startX + col * deltaX )/ areaWidth;
+                            point.y =( startY + row * deltaY )/ areaHeight;
+                            points.push_back(point);
+                        }
+                    }
+                }
+
+                return points;
+            };
+               void setIO(int inputs, int outputs)
            {
                in=inputs;
                out=outputs;
@@ -167,6 +201,7 @@ public:
                std::cout << " in-out " + std::to_string(in) + " - " + std::to_string(out) + " \n ";
                std::cout << " randWeight " + std::to_string(randWeight) + " \n ";
 
+               //    point = (Point*) malloc((nlCount)*sizeof(Point));
 
                hidden = (float*) malloc((out)*sizeof(float));
 
@@ -219,6 +254,27 @@ public:
                errTmp = (float *) malloc((out) * sizeof(float));
                for (int i = 0; i < out; i++)
                { errTmp[i] = 0; };
+
+
+
+               //    point = (Point*) malloc((nlCount)*sizeof(Point));
+               int numPoints = 10;
+               double areaWidth = 1000.0;
+               double areaHeight = 1000.0;
+
+               pointsIn = distributePointsEvenly(inputs, areaWidth, areaHeight);
+//               std::cout << "in:" << std::endl;
+               for (const auto& point : pointsIn) {
+                   std::cout << "in X: " << point.x << ", Y: " << point.y << std::endl;
+               }
+
+               pointsOut = distributePointsEvenly(outputs, areaWidth, areaHeight);
+//               std::cout << "out:" << std::endl;
+               for (const auto& point : pointsOut) {
+                   std::cout << "out X: " << point.x << ", Y: " << point.y << std::endl;
+               }
+
+
            }
            void toHiddenLayer(float *inputs)
            {

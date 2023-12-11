@@ -6,9 +6,13 @@
 
 bool is_optimizedM;
 
-//switcher
+//switchers
 bool allow_optimisation_transform = false;
 //bool allow_optimisation_transform = false;
+bool start_visualisation = false;
+//bool start_visualisation = true;
+
+double zIncrement = 0.1;
 
 int iCycle;
 int iCycleTotal;
@@ -26,6 +30,8 @@ myNeuro::myNeuro()
 
     errOptinizationLimit = errOptinizationLimitG;
     list = (nnLay*) malloc((nlCount)*sizeof(nnLay));
+
+
 
     inputs = (float*) malloc((inputNeurons)*sizeof(float));
     targets = (float*) malloc((outputNeurons)*sizeof(float));
@@ -48,8 +54,8 @@ myNeuro::myNeuro()
 //    list[1].setIO(n2, 30);
 //    list[2].setIO(30, n3);
 
-    list[0].setIO(n1, n2);
-    list[1].setIO(n2, n3);
+    list[0].setIO(n1 / 16, n2 / 16);
+    list[1].setIO(n2 / 16, n3);
 
 
 

@@ -1,26 +1,44 @@
+// for qt
 //#include <QCoreApplication>
 //#include <QDebug>
 //#include <QTime>
 
-
-
-//for linux
-//#include "myNeuro.cpp"
 //#include <sys/time.h>
-
-//for win!!
-#include "myNeuro.h"
 #include <time.h>
-//for openGL visulaise
-#include <Windows.h>
-#include <GL\glew.h>
-//do not uncomment #define FREEGLUT_STATIC
-//do not uncomment #define _LIB
-//do not uncomment #define FREEGLUT_LIB_PRAGMAS 0
-#include <GL\freeglut.h>
-#include <iostream>
-//do not uncomment #include <windows.h>
-//do not uncomment #include <gl\gl.h>
+
+
+
+#ifndef __APPLE__
+    //for win!!
+    #include "myNeuro.h"
+
+    //for openGL visulaise
+    #include <Windows.h>
+    #include <GL\glew.h>
+    #include <GL\glut.h>
+    //do not uncomment #define FREEGLUT_STATIC
+    //do not uncomment #define _LIB
+    //do not uncomment #define FREEGLUT_LIB_PRAGMAS 0
+    #include <GL\freeglut.h>
+    #include <iostream>
+    //do not uncomment #include <windows.h>
+    //do not uncomment #include <gl\gl.h>
+
+    //start openGL visualise
+    #include <stdio.h>
+    #include <math.h>
+    #include <stdlib.h>
+    #include <conio.h>
+    //#include "iostream"
+    #include <time.h>
+    //using namespace std;
+
+    bool flag = true;
+    GLfloat xRotated, yRotated, zRotated;
+#else
+    //for linux
+    #include "myNeuro.cpp"
+#endif
 
 
 
@@ -32,7 +50,7 @@ ifstream label;
 ofstream report;
 
 
-bool start_visualisation = false;
+
 myNeuro* bb;
 
 float pointOfCentre = 0.5;
@@ -288,25 +306,264 @@ void write_matrix(string file_name) {
 
 
 
+#ifndef __APPLE__
 
 
 
 
 
 
+void drawLayer(double z, std::vector<Point> points, bool drawGraph = false, std::vector<Point> pointsPrev = {})
+{
+    double x;
+    double y;
+    for(int i=0;i<=(points.size()-1);i--){
+        x = points[i].x;
+        y = points[i].y;
+        glPointSize(3.0);
+        glColor4f(1.0, 1.0, 1.0, 0.95);
 
-//start openGL visualise
-#include <GL\glut.h>
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
-#include <conio.h>
-#include "iostream"
-#include <time.h>
-using namespace std;
+        glBegin(GL_POINTS);
+        glVertex3f(x, y, z);
+        glEnd();
 
-bool flag = true;
-GLfloat xRotated, yRotated, zRotated;
+        if(drawGraph){
+            zP = z-zIncrement;
+            for(int i=0;i<=(pointsPrev.size()-1);i--) {
+                xP = pointsPrev[i].x;
+                yP = pointsPrev[i].y;
+                glPointSize(3.0);
+                glColor4f(1.0, 1.0, 1.0, 0.95);
+
+                glBegin(GL_LINE_LOOP);
+                glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
+                glVertex3f(x, y, z);
+                glVertex3f(xP, yP, zP);
+                glEnd();
+            }
+        }
+    }
+
+}
+
+
+
+
+void displaynetwork_v2(void)
+{
+    glMatrixMode(GL_MODELVIEW);
+    // clear the drawing buffer.
+    glClear(GL_COLOR_BUFFER_BIT);
+    // clear the identity matrix.
+    glLoadIdentity();
+    // traslate the draw by z = -4.0
+    // Note this when you decrease z like -8.0 the drawing will looks far , or smaller.
+    glTranslatef(-1.0, -0.75, -3.5); // -1.6 for scaling of 2.3
+    // Red color used to draw.
+    glColor3f(0.8, 0.2, 0.1);
+    glRotatef(yRotated, 1.0, 1.0, 1.0);
+    glScalef(1.0, 1.0, 1.0);
+
+    float dead_transparency_line = 0.08;
+    float live_transparency_line = 0.15;
+
+//    for(int i=(bb->nlCount-1);i>=0;i--)
+//    {
+//
+//    }
+
+    std::vector<Point> pointsPrev, pointsW = bb->list[0].pointsIn;
+    int pointCount = bb->list[0].getInCount();
+    double z = 0.0;
+    drawLayer(z, pointsW);
+
+    for(int i=0;i<=(bb->nlCount-1);i--)
+    {
+        //        pointsCount = bb->list[0].getOutCount();
+        pointsW = bb->list[i].pointsOut;
+        z += zIncrement;
+        drawLayer(z, pointsW, true, pointsPrev);
+        pointsPrev = pointsW;
+    }
+
+
+//    float a, b, c;
+//    int l1, l2, l3, l4;
+//    int m1, m2, m3, m4;
+//    m1 = 28 * 28;
+//    m2 = 28 * 10;
+//    m3 = 128;
+//    m4 = 10;
+//    for (a = 0; a <= 1; a = a + 0.1)
+//    {
+//        for (b = 0; b <= 1; b = b + 0.1)
+//        {
+//            for (c = 0; c <= 1; c = c + 0.1)
+//            {
+//                //Input Layer
+//                glPointSize(15.0);
+//                glBegin(GL_POINTS);
+//                glColor4f(1.0, 1.0, 1.0, 0.95);
+//                glVertex3f(0.1 + b, 0.1 + a, 0.0);
+//                glEnd();
+//
+//                //First Hidden Layer Plane 1
+//                glPointSize(12.0);
+//                glBegin(GL_POINTS);
+//                glColor4f(0.0, 1.0, 0.0, 0.95);
+//                glVertex3f(0.1 + b, 0.1 + c, 0.4);
+//                glEnd();
+//
+//                glBegin(GL_LINE_LOOP);
+//                glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
+//                glVertex3f(0.1 + b, 0.1 + a, 0.0);
+//                glVertex3f(0.1 + b, 0.1 + c, 0.4);
+//                glEnd();
+//
+//                glBegin(GL_LINE_LOOP);
+//                glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
+//                glVertex3f(0.1 + a, 0.1 + c, 0.0);
+//                glVertex3f(0.1 + b, 0.1 + c, 0.4);
+//                glEnd();
+//
+//                //First Hidden Layer Plane 2
+//                if (c < 0.47)
+//                {
+//                    glPointSize(12.0);
+//                    glBegin(GL_POINTS);
+//                    glVertex3f(0.1 + b, 0.1 + a, 0.0);
+//                    //glVertex3f(0.13 + b, 0.13 + c, 0.42);
+//                    glEnd();
+//                    glBegin(GL_LINE_LOOP);
+//                    glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
+//                    glVertex3f(0.1 + b, 0.1 + a, 0.0);
+//                    //glVertex3f(0.13 + b, 0.13 + c, 0.42);
+//                    //glVertex3f(0.13 + b, 0.13 + c, 0.42);
+//                    glEnd();
+//                }
+//
+//                //First Hidden Layer Plane 3
+//                glPointSize(12.0);
+//                glBegin(GL_POINTS);
+//                glVertex3f(0.1 + b, 0.1 + a, 0.0);
+//                //glVertex3f(0.07 + b, 0.07 + c, 0.42);
+//                //glVertex3f(0.07 + b, 0.07 + c, 0.42);
+//                glEnd();
+//                glBegin(GL_LINE_LOOP);
+//                glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
+//                glVertex3f(0.1 + b, 0.1 + a, 0.0);
+//                //glVertex3f(0.07 + b, 0.07 + c, 0.42);
+//                //glVertex3f(0.07 + b, 0.07 + c, 0.42);
+//                glEnd();
+//
+//                //First Hidden Layer Plane 4
+//                if (c < 0.44)
+//                {
+//                    glPointSize(12.0);
+//                    glBegin(GL_POINTS);
+//                    glVertex3f(0.1 + b, 0.1 + a, 0.0);
+//                    //glVertex3f(0.17 + b, 0.16 + c, 0.44);
+//                    //glVertex3f(0.17 + b, 0.16 + c, 0.44);
+//                    glEnd();
+//                    glBegin(GL_LINE_LOOP);
+//                    glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
+//                    glVertex3f(0.1 + b, 0.1 + a, 0.0);
+//                    //glVertex3f(0.17 + b, 0.16 + c, 0.44);
+//                    //glVertex3f(0.17 + b, 0.16 + c, 0.44);
+//                    glEnd();
+//                }
+//
+//                //Second Hidden Layer Plane 1
+//                glPointSize(12.0);
+//                glBegin(GL_POINTS);
+//                glColor4f(0.0, 0.0, 1.0, 0.95);
+//                glVertex3f(0.1 + b, 0.1 + c, 0.8);
+//                //glVertex3f(0.1 + b, 0.1 + c, 0.8);
+//                glEnd();
+//                glBegin(GL_LINE_LOOP);
+//                glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
+//                glVertex3f(0.1 + b, 0.1 + a, 0.4);
+//                glVertex3f(0.1 + b, 0.1 + c, 0.8);
+//                glEnd();
+//
+//                glBegin(GL_LINE_LOOP);
+//                glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
+//                glVertex3f(0.1 + b, 0.1 + c, 0.8);
+//                glVertex3f(0.1 + a, 0.1 + c, 0.4);
+//                glEnd();
+//
+//                //Second Hidden Layer Plane 2
+//                if (c < 0.47)
+//                {
+//                    glPointSize(12.0);
+//                    glBegin(GL_POINTS);
+//                    //glVertex3f(0.1 + b, 0.1 + a, 0.42);
+//                    //glVertex3f(0.13 + b, 0.13 + c, 0.82);
+//                    //glVertex3f(0.13 + b, 0.13 + c, 0.82);
+//                    glEnd();
+//                    glBegin(GL_LINE_LOOP);
+//                    glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
+//                    glVertex3f(0.1 + b, 0.1 + a, 0.0);
+//                    //glVertex3f(0.13 + b, 0.13 + c, 0.82);
+//                    //glVertex3f(0.13 + b, 0.13 + c, 0.82);
+//                    glEnd();
+//                }
+//
+//                //Output Layer
+//                glPointSize(12.0);
+//                glBegin(GL_POINTS);
+//                glColor4f(1.0, 0.0, 0.0, 0.95);
+//                glVertex3f(0.1 + b, pointOfCentre, 1.2);
+//                //glVertex3f(0.1 + b, pointOfCentre, 1.2);
+//                glEnd();
+//                glBegin(GL_LINE_LOOP);
+//                glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
+//                glVertex3f(0.1 + b, 0.1 + c, 0.8);
+//                glVertex3f(0.1 + a, pointOfCentre, 1.2);
+//                //glVertex3f(0.1 + a, pointOfCentre, 1.2);
+//                glEnd();
+//            }
+//        }
+//    }
+//
+//    if (flag == true)
+//    {
+//        //Inut image '1'
+//        glPointSize(15.0);
+//        glBegin(GL_POINTS);
+//        glColor4f(0.0, 0.0, 1.0, 1.0);
+//        glVertex3f(0.3, 0.2, 0.0);
+//        glVertex3f(0.3, 0.3, 0.0);
+//        glVertex3f(0.3, 0.4, 0.0);
+//        glVertex3f(0.3, 0.5, 0.0);
+//        glVertex3f(0.3, 0.6, 0.0);
+//        glVertex3f(0.4, 0.5, 0.0);
+//        glVertex3f(0.2, 0.2, 0.0);
+//        glVertex3f(0.3, 0.2, 0.0);
+//        glVertex3f(0.4, 0.2, 0.0);
+//        glEnd();
+//
+//        //Highlighting the active neurons
+//        highlight_lines(0.3, 0.2, 0.0, live_transparency_line);
+//        highlight_lines(0.3, 0.3, 0.0, live_transparency_line);
+//        highlight_lines(0.3, 0.4, 0.0, live_transparency_line);
+//        highlight_lines(0.3, 0.5, 0.0, live_transparency_line);
+//        highlight_lines(0.3, 0.6, 0.0, live_transparency_line);
+//        highlight_lines(0.4, 0.5, 0.0, live_transparency_line);
+//        highlight_lines(0.2, 0.2, 0.0, live_transparency_line);
+//        highlight_lines(0.3, 0.2, 0.0, live_transparency_line);
+//        highlight_lines(0.4, 0.2, 0.0, live_transparency_line);
+//    }
+
+
+    //Flushing the whole output
+    glFlush();
+    // sawp buffers called because we are using double buffering
+    glutSwapBuffers();
+}
+
+
+
 
 void changeViewPort(int w, int h)
 {
@@ -605,7 +862,7 @@ void reshapenetwork(int x, int y)
 void idlenetwork(void)
 {
     yRotated += 0.05;
-    displaynetwork();
+    displaynetwork_v2();
 }
 void render()
 {
@@ -613,8 +870,7 @@ void render()
     glutSwapBuffers();
 }
 
-
-
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -636,17 +892,20 @@ int main(int argc, char *argv[])
 
 
 
-
+#ifndef __APPLE__
     if (start_visualisation) {
         //for openGl visulaise
-        // 
+        //
+
         //Initialize GLUT
         glutInit(&argc, argv);
         //double buffering used to avoid flickering problem in animation
         glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+
         // window size
         glutInitWindowSize(1350, 950);
         glutInitWindowPosition(0, 0);
+
         // create the window 
         glutCreateWindow("network Rotating Animation");
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -654,17 +913,19 @@ int main(int argc, char *argv[])
         glClearColor(0.0, 0.0, 0.0, 0.0);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         //Assign  the function used in events
-        glutDisplayFunc(displaynetwork);
+        glutDisplayFunc(displaynetwork_v2);
         glutReshapeFunc(reshapenetwork);
         glutIdleFunc(idlenetwork);
+
         //Let start glut loop
         glutTimerFunc(100, check, 0);
         glutMainLoop();
         return 0;
 
     }
-
+#endif
 
 
 
