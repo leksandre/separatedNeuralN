@@ -53,6 +53,10 @@ ofstream report;
 
 myNeuro* bb;
 
+double zIncrement = 0.4;
+float dead_transparency_line = 0.08;
+float live_transparency_line = 0.15;
+
 float pointOfCentre = 0.5;
 
 const int epochs = 512;
@@ -313,13 +317,29 @@ void write_matrix(string file_name) {
 
 
 
-void drawLayer(double z, std::vector<Point> points, bool drawGraph = false, std::vector<Point> pointsPrev = {})
+void drawLayer(double z, int pointsInCount, Point * points, bool drawGraph = false, int pointsOutCount=0, Point * pointsPrev = {})
 {
     double x;
     double y;
-    for(int i=0;i<=(points.size()-1);i--){
+    int i = 0;
+    for(int i=0;i<=(pointsInCount-1);i++){
+
+
+        //std::cout << "drawGraph" << fixed << drawGraph << endl;;;
+        //std::cout << "z" << fixed << z << endl;;;
+        //std::cout << "i" << fixed << i << endl;;;
+
+
+        //std::cout << "points[i]" << std::to_string(point) << endl;;;
+        //std::cout << "points[i]" << fixed << std::to_string(point) << endl;;;
+        // 
+        //std::cout << "points[i].x" << fixed << points[i].x << endl;;;
+        //std::cout << "points[i].y" << fixed << points[i].y << endl;;;
+        
         x = points[i].x;
         y = points[i].y;
+        
+        
         glPointSize(3.0);
         glColor4f(1.0, 1.0, 1.0, 0.95);
 
@@ -327,11 +347,11 @@ void drawLayer(double z, std::vector<Point> points, bool drawGraph = false, std:
         glVertex3f(x, y, z);
         glEnd();
 
-        if(drawGraph){
-            zP = z-zIncrement;
-            for(int i=0;i<=(pointsPrev.size()-1);i--) {
-                xP = pointsPrev[i].x;
-                yP = pointsPrev[i].y;
+        if(drawGraph & false){
+            double zP = z-zIncrement;
+            for(int i=0;i<=(pointsOutCount -1);i++) {
+                double xP = pointsPrev[i].x;
+                double yP = pointsPrev[i].y;
                 glPointSize(3.0);
                 glColor4f(1.0, 1.0, 1.0, 0.95);
 
@@ -342,6 +362,7 @@ void drawLayer(double z, std::vector<Point> points, bool drawGraph = false, std:
                 glEnd();
             }
         }
+        i++;
     }
 
 }
@@ -372,17 +393,23 @@ void displaynetwork_v2(void)
 //
 //    }
 
-    std::vector<Point> pointsPrev, pointsW = bb->list[0].pointsIn;
-    int pointCount = bb->list[0].getInCount();
+    Point * pointsW = bb->list[0].getInPoints();
+    Point * pointsPrev = bb->list[0].getInPoints();
+    int pointsInCount = bb->list[0].getInCount();
     double z = 0.0;
-    drawLayer(z, pointsW);
-
-    for(int i=0;i<=(bb->nlCount-1);i--)
+    drawLayer(z, pointsInCount, pointsW);
+    //std::cout << "\n z = " << z;;
+    //std::cout << "\n bb->nlCount = "<< (bb->nlCount);;
+    for(int i=0;i<=((bb->nlCount)-1);i++)
     {
-        //        pointsCount = bb->list[0].getOutCount();
-        pointsW = bb->list[i].pointsOut;
+        //std::cout << "\n i = " << i;;
+        int pointsOutCount = bb->list[i].getOutCount();
+        pointsW = bb->list[i].getOutPoints();
         z += zIncrement;
-        drawLayer(z, pointsW, true, pointsPrev);
+        //std::cout << "\n z+inc = " << z;;
+        //std::cout << "\n pointsW.size() = " << sizeof(pointsW);;
+        //std::cout << "\n pointsOutCount = " << pointsOutCount;;
+        drawLayer(z, pointsInCount, pointsW, true, pointsOutCount, pointsPrev);
         pointsPrev = pointsW;
     }
 
@@ -581,7 +608,7 @@ void check(int value)
     {
         flag = true;
     }
-    cout << flag << "\n";
+    //cout << flag << "\n";
     glutPostRedisplay();
     glutTimerFunc(100, check, 0);
 
@@ -675,8 +702,7 @@ void displaynetwork(void)
     glRotatef(yRotated, 1.0, 1.0, 1.0);
     glScalef(1.0, 1.0, 1.0);
 
-    float dead_transparency_line = 0.08;
-    float live_transparency_line = 0.15;
+
     float a, b, c;
     //int l1, l2, l3, l4;
     //int m1, m2, m3, m4;
@@ -883,14 +909,15 @@ int main(int argc, char *argv[])
     double time_taken;
     time(&start);
 
-
-   bb = new myNeuro();
+    
+    bb = new myNeuro();
+  
     iCycleTotal = 0;
     //    start_varian1 = false;
     bool start_varian1 = true;
 
 
-
+    //Sleep(10000);
 
 #ifndef __APPLE__
     if (start_visualisation) {
@@ -923,7 +950,7 @@ int main(int argc, char *argv[])
         glutTimerFunc(100, check, 0);
         glutMainLoop();
         return 0;
-
+        //
     }
 #endif
 

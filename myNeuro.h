@@ -7,6 +7,7 @@ extern bool is_optimizedM;
 extern bool allow_optimisation_transform;
 //bool allow_optimisation_transform = false;
 
+extern bool start_visualisation;
 extern int iCycle;
 extern int iCycleTotal;
 
@@ -81,9 +82,9 @@ const int n1 = width * height; // = 784, without bias neuron
 const int n2 = 128;
 const int n3 = 10; // Ten classes: 0 - 9
 
-const float errLimitG = 0.000005;
+const float errLimitG = 0.005;
 
-const float errOptinizationLimitG = 0.0001; //0.00003; //0.000001; //0.00003;
+const float errOptinizationLimitG = 0.001; //0.00003; //0.000001; //0.00003;
 
 
 //for win!!
@@ -119,13 +120,15 @@ public:
 
            bool is_optimizedL;
            float * errTmp;
-           std::vector<Point> pointsIn;
-           std::vector<Point> pointsOut;
+           struct Point *  pointsIn_ ;
+           struct Point *  pointsOut_ ;
            float ** matrix;
            float * hidden;
            float * errors;
 //           int setInCount(int inputs){in=inputs};
 //           int setOutCount(int outputs){out=outputs};
+            Point * getInPoints(){return pointsIn_;}
+            Point * getOutPoints(){return pointsOut_;}
            int getInCount(){return in;}
            int getOutCount(){return out;}
            float **getMatrix(){return matrix;}
@@ -198,7 +201,8 @@ public:
                in=inputs;
                out=outputs;
 
-               std::cout << " in-out " + std::to_string(in) + " - " + std::to_string(out) + " \n ";
+               std::cout << " in- " << fixed << std::to_string(in);
+               std::cout << " out- " << fixed << std::to_string(out) + " \n ";
                std::cout << " randWeight " + std::to_string(randWeight) + " \n ";
 
                //    point = (Point*) malloc((nlCount)*sizeof(Point));
@@ -261,19 +265,38 @@ public:
                int numPoints = 10;
                double areaWidth = 1000.0;
                double areaHeight = 1000.0;
-
+               std::vector<Point> pointsIn = {};
+               std::vector<Point> pointsOut = {};
+               //pointsIn_ = {};
+               //pointsOut_ = {};
                pointsIn = distributePointsEvenly(inputs, areaWidth, areaHeight);
-//               std::cout << "in:" << std::endl;
+               std::cout << "in:" << std::endl;
+               pointsIn_ = (Point*)malloc((inputs) * sizeof(Point));
+
+               int iPoints = 0;
                for (const auto& point : pointsIn) {
                    std::cout << "in X: " << point.x << ", Y: " << point.y << std::endl;
+                   Point point_;
+                   point_.x = point.x;
+                   point_.y = point.y;
+                   pointsIn_[iPoints] = (point_);
+                   iPoints++;
                }
 
                pointsOut = distributePointsEvenly(outputs, areaWidth, areaHeight);
-//               std::cout << "out:" << std::endl;
+               std::cout << "out:" << std::endl;
+               pointsOut_ = (Point*)malloc((outputs) * sizeof(Point));
+
+               iPoints = 0;
                for (const auto& point : pointsOut) {
                    std::cout << "out X: " << point.x << ", Y: " << point.y << std::endl;
+                   Point point_;
+                   point_.x = point.x;
+                   point_.y = point.y;
+                   pointsOut_[iPoints] = (point_);
+                   iPoints++;
                }
-
+            
 
            }
            void toHiddenLayer(float *inputs)

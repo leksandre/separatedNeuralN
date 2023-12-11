@@ -9,10 +9,10 @@ bool is_optimizedM;
 //switchers
 bool allow_optimisation_transform = false;
 //bool allow_optimisation_transform = false;
-bool start_visualisation = false;
+bool start_visualisation = true;
 //bool start_visualisation = true;
 
-double zIncrement = 0.1;
+
 
 int iCycle;
 int iCycleTotal;
@@ -24,7 +24,7 @@ myNeuro::myNeuro()
     inputNeurons = n1;
     outputNeurons =n3;
 
-    nlCount = 2;//(!!!)укажи сколько слоев используешь, иначе нaвернется
+    nlCount = 4;//(!!!)укажи сколько слоев используешь, иначе нaвернется
 
     errLimit = errLimitG;
 
@@ -45,17 +45,17 @@ myNeuro::myNeuro()
     //list[1].setIO(n2, 40);
     //list[1].setIO(40, n3);
 
-    //list[0].setIO(n1,n2);
-    //list[1].setIO(n2,60);
-    //list[2].setIO(60,30);
-    //list[3].setIO(30,n3);
+    list[0].setIO(n1,n2);
+    list[1].setIO(n2,60);
+    list[2].setIO(60,30);
+    list[3].setIO(30,n3);
 
 //    list[0].setIO(n1, n2);
 //    list[1].setIO(n2, 30);
 //    list[2].setIO(30, n3);
 
-    list[0].setIO(n1 / 16, n2 / 16);
-    list[1].setIO(n2 / 16, n3);
+ /*   list[0].setIO(n1 / 6, n2);
+    list[1].setIO(n2, n3);*/
 
 
 
@@ -131,7 +131,7 @@ float* myNeuro::processErrors(int i, bool & startOptimisation, bool showError = 
 
 
     //startOptimisation = startOptimisation & (err1<errOptinizationLimit) ;
-    startOptimisation = startOptimisation & (totalE<errOptinizationLimit) ; // & (i == (nlCount-1)) // & true ; //
+    startOptimisation = startOptimisation && (totalE<errOptinizationLimit) ; // & (i == (nlCount-1)) // & true ; //
     if (list[i].is_optimizedL != startOptimisation) list[i].is_optimizedL = startOptimisation;
 
 
@@ -308,7 +308,7 @@ void myNeuro::printArray(float *arr, int iList, int s)
         type_s = typeid(arr[inp]).name();
         //std::cout<< type_s;
         str_f = 'f';
-        if(type_s == str_f | type_s == "float") {
+        if(type_s == str_f || type_s == "float") {
 
             //v0
             int i2 = 0;
