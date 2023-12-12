@@ -317,13 +317,16 @@ void write_matrix(string file_name) {
 
 
 
-void drawLayer(double z, int pointsInCount, Point * points, bool drawGraph = false, int pointsOutCount=0, Point * pointsPrev = {})
+//void drawLayer(double z, int pointsInCount, Point * points, bool drawGraph = false, int pointsOutCount=0, Point * pointsPrev = {})
+void drawLayer(double z, int iList)
 {
+    Point * points = bb->list[iList].getInPoints();
+    int pointsInCount = bb->list[iList].getInCount();
+
     double x;
     double y;
     int i = 0;
     for(int i=0;i<=(pointsInCount-1);i++){
-
 
         //std::cout << "drawGraph" << fixed << drawGraph << endl;;;
         //std::cout << "z" << fixed << z << endl;;;
@@ -347,11 +350,13 @@ void drawLayer(double z, int pointsInCount, Point * points, bool drawGraph = fal
         glVertex3f(x, y, z);
         glEnd();
 
-        if(drawGraph & false){
+        if((iList>0) & false){//идем на координаты точек на выходе предидущего слоя
+            Point * pointsPrev = bb->list[iList-1].getOutPoints();
+            int pointsOutCount = bb->list[iList-1].getOutCount();
             double zP = z-zIncrement;
-            for(int i=0;i<=(pointsOutCount -1);i++) {
-                double xP = pointsPrev[i].x;
-                double yP = pointsPrev[i].y;
+            for(int j=0;j<=(pointsOutCount -1);j++) {
+                double xP = pointsPrev[j].x;
+                double yP = pointsPrev[j].y;
                 glPointSize(3.0);
                 glColor4f(1.0, 1.0, 1.0, 0.95);
 
@@ -388,170 +393,34 @@ void displaynetwork_v2(void)
     float dead_transparency_line = 0.08;
     float live_transparency_line = 0.15;
 
-//    for(int i=(bb->nlCount-1);i>=0;i--)
-//    {
-//
-//    }
 
-    Point * pointsW = bb->list[0].getInPoints();
-    Point * pointsPrev = bb->list[0].getInPoints();
-    int pointsInCount = bb->list[0].getInCount();
+
+
     double z = 0.0;
-    drawLayer(z, pointsInCount, pointsW);
+
+    //    drawLayer(z, pointsInCount, pointsW);
+    drawLayer(z, 0);
+
     //std::cout << "\n z = " << z;;
     //std::cout << "\n bb->nlCount = "<< (bb->nlCount);;
+
     for(int i=0;i<=((bb->nlCount)-1);i++)
     {
+
         //std::cout << "\n i = " << i;;
-        int pointsOutCount = bb->list[i].getOutCount();
-        pointsW = bb->list[i].getOutPoints();
+
         z += zIncrement;
+
         //std::cout << "\n z+inc = " << z;;
         //std::cout << "\n pointsW.size() = " << sizeof(pointsW);;
         //std::cout << "\n pointsOutCount = " << pointsOutCount;;
-        drawLayer(z, pointsInCount, pointsW, true, pointsOutCount, pointsPrev);
-        pointsPrev = pointsW;
+
+        //        drawLayer(z, pointsInCount, pointsW, true, pointsOutCount, pointsPrev);
+        drawLayer(z, i);
+
     }
 
 
-//    float a, b, c;
-//    int l1, l2, l3, l4;
-//    int m1, m2, m3, m4;
-//    m1 = 28 * 28;
-//    m2 = 28 * 10;
-//    m3 = 128;
-//    m4 = 10;
-//    for (a = 0; a <= 1; a = a + 0.1)
-//    {
-//        for (b = 0; b <= 1; b = b + 0.1)
-//        {
-//            for (c = 0; c <= 1; c = c + 0.1)
-//            {
-//                //Input Layer
-//                glPointSize(15.0);
-//                glBegin(GL_POINTS);
-//                glColor4f(1.0, 1.0, 1.0, 0.95);
-//                glVertex3f(0.1 + b, 0.1 + a, 0.0);
-//                glEnd();
-//
-//                //First Hidden Layer Plane 1
-//                glPointSize(12.0);
-//                glBegin(GL_POINTS);
-//                glColor4f(0.0, 1.0, 0.0, 0.95);
-//                glVertex3f(0.1 + b, 0.1 + c, 0.4);
-//                glEnd();
-//
-//                glBegin(GL_LINE_LOOP);
-//                glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
-//                glVertex3f(0.1 + b, 0.1 + a, 0.0);
-//                glVertex3f(0.1 + b, 0.1 + c, 0.4);
-//                glEnd();
-//
-//                glBegin(GL_LINE_LOOP);
-//                glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
-//                glVertex3f(0.1 + a, 0.1 + c, 0.0);
-//                glVertex3f(0.1 + b, 0.1 + c, 0.4);
-//                glEnd();
-//
-//                //First Hidden Layer Plane 2
-//                if (c < 0.47)
-//                {
-//                    glPointSize(12.0);
-//                    glBegin(GL_POINTS);
-//                    glVertex3f(0.1 + b, 0.1 + a, 0.0);
-//                    //glVertex3f(0.13 + b, 0.13 + c, 0.42);
-//                    glEnd();
-//                    glBegin(GL_LINE_LOOP);
-//                    glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
-//                    glVertex3f(0.1 + b, 0.1 + a, 0.0);
-//                    //glVertex3f(0.13 + b, 0.13 + c, 0.42);
-//                    //glVertex3f(0.13 + b, 0.13 + c, 0.42);
-//                    glEnd();
-//                }
-//
-//                //First Hidden Layer Plane 3
-//                glPointSize(12.0);
-//                glBegin(GL_POINTS);
-//                glVertex3f(0.1 + b, 0.1 + a, 0.0);
-//                //glVertex3f(0.07 + b, 0.07 + c, 0.42);
-//                //glVertex3f(0.07 + b, 0.07 + c, 0.42);
-//                glEnd();
-//                glBegin(GL_LINE_LOOP);
-//                glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
-//                glVertex3f(0.1 + b, 0.1 + a, 0.0);
-//                //glVertex3f(0.07 + b, 0.07 + c, 0.42);
-//                //glVertex3f(0.07 + b, 0.07 + c, 0.42);
-//                glEnd();
-//
-//                //First Hidden Layer Plane 4
-//                if (c < 0.44)
-//                {
-//                    glPointSize(12.0);
-//                    glBegin(GL_POINTS);
-//                    glVertex3f(0.1 + b, 0.1 + a, 0.0);
-//                    //glVertex3f(0.17 + b, 0.16 + c, 0.44);
-//                    //glVertex3f(0.17 + b, 0.16 + c, 0.44);
-//                    glEnd();
-//                    glBegin(GL_LINE_LOOP);
-//                    glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
-//                    glVertex3f(0.1 + b, 0.1 + a, 0.0);
-//                    //glVertex3f(0.17 + b, 0.16 + c, 0.44);
-//                    //glVertex3f(0.17 + b, 0.16 + c, 0.44);
-//                    glEnd();
-//                }
-//
-//                //Second Hidden Layer Plane 1
-//                glPointSize(12.0);
-//                glBegin(GL_POINTS);
-//                glColor4f(0.0, 0.0, 1.0, 0.95);
-//                glVertex3f(0.1 + b, 0.1 + c, 0.8);
-//                //glVertex3f(0.1 + b, 0.1 + c, 0.8);
-//                glEnd();
-//                glBegin(GL_LINE_LOOP);
-//                glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
-//                glVertex3f(0.1 + b, 0.1 + a, 0.4);
-//                glVertex3f(0.1 + b, 0.1 + c, 0.8);
-//                glEnd();
-//
-//                glBegin(GL_LINE_LOOP);
-//                glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
-//                glVertex3f(0.1 + b, 0.1 + c, 0.8);
-//                glVertex3f(0.1 + a, 0.1 + c, 0.4);
-//                glEnd();
-//
-//                //Second Hidden Layer Plane 2
-//                if (c < 0.47)
-//                {
-//                    glPointSize(12.0);
-//                    glBegin(GL_POINTS);
-//                    //glVertex3f(0.1 + b, 0.1 + a, 0.42);
-//                    //glVertex3f(0.13 + b, 0.13 + c, 0.82);
-//                    //glVertex3f(0.13 + b, 0.13 + c, 0.82);
-//                    glEnd();
-//                    glBegin(GL_LINE_LOOP);
-//                    glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
-//                    glVertex3f(0.1 + b, 0.1 + a, 0.0);
-//                    //glVertex3f(0.13 + b, 0.13 + c, 0.82);
-//                    //glVertex3f(0.13 + b, 0.13 + c, 0.82);
-//                    glEnd();
-//                }
-//
-//                //Output Layer
-//                glPointSize(12.0);
-//                glBegin(GL_POINTS);
-//                glColor4f(1.0, 0.0, 0.0, 0.95);
-//                glVertex3f(0.1 + b, pointOfCentre, 1.2);
-//                //glVertex3f(0.1 + b, pointOfCentre, 1.2);
-//                glEnd();
-//                glBegin(GL_LINE_LOOP);
-//                glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
-//                glVertex3f(0.1 + b, 0.1 + c, 0.8);
-//                glVertex3f(0.1 + a, pointOfCentre, 1.2);
-//                //glVertex3f(0.1 + a, pointOfCentre, 1.2);
-//                glEnd();
-//            }
-//        }
-//    }
 //
 //    if (flag == true)
 //    {

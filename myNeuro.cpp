@@ -1,6 +1,6 @@
 #include "myNeuro.h"
 //#include <QDebug>
-//using namespace std;
+
 #include <typeinfo>
 #define STRING(Value) #Value
 
@@ -12,7 +12,8 @@ bool allow_optimisation_transform = false;
 bool start_visualisation = true;
 //bool start_visualisation = true;
 
-
+double areaWidth = 1000.0;
+double areaHeight = 1000.0;
 
 int iCycle;
 int iCycleTotal;
@@ -62,15 +63,13 @@ myNeuro::myNeuro()
 //   std::cout<<"\n_________________________________ start myNeuro cpp myNeuro\n";;
 
 
-    //--------однослойный---------//
+    //--------singel (пример)---------//
 //    inputNeurons = 100;
 //    outputNeurons =2;
 //    nlCount = 2;
 //    list = (nnLay*) malloc((nlCount)*sizeof(nnLay));
-
 //    inputs = (float*) malloc((inputNeurons)*sizeof(float));
 //    targets = (float*) malloc((outputNeurons)*sizeof(float));
-
 //    list[0].setIO(100,10);
 //    list[1].setIO(10,2);
 
@@ -89,6 +88,7 @@ float **  myNeuro::feedForwarding(bool mode_train)
         return backPropagate();// обратн расп ошибки
     } else // is query mode
     {
+
 //        std::cout<<std::to_string(outputNeurons)+"!mode_train - Feed Forward: \n";;
 //        std::cout<<"nlCount:"+std::to_string(nlCount)+"\n";
 //        std::cout<<"total outputNeurons:"+std::to_string(outputNeurons)+"\n";

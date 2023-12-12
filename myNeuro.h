@@ -6,7 +6,8 @@ extern bool is_optimizedM;
 //switcher
 extern bool allow_optimisation_transform;
 //bool allow_optimisation_transform = false;
-
+extern double areaWidth;
+extern double areaHeight;
 extern bool start_visualisation;
 extern int iCycle;
 extern int iCycleTotal;
@@ -174,7 +175,7 @@ public:
                    matrix[in][ou] += (learnRate * errors[ou]);
                }
            };
-            std::vector<Point> distributePointsEvenly(int numPoints, double areaWidth, double areaHeight) {
+            std::vector<Point> distributePointsEvenly(int numPoints) {
                 std::vector<Point> points;
                 int numRows = sqrt(numPoints);
                 int numCols = ceil(static_cast<double>(numPoints) / numRows);
@@ -259,16 +260,9 @@ public:
                for (int i = 0; i < out; i++)
                { errTmp[i] = 0; };
 
-
-
-               //    point = (Point*) malloc((nlCount)*sizeof(Point));
-               int numPoints = 10;
-               double areaWidth = 1000.0;
-               double areaHeight = 1000.0;
                std::vector<Point> pointsIn = {};
                std::vector<Point> pointsOut = {};
-               //pointsIn_ = {};
-               //pointsOut_ = {};
+
                pointsIn = distributePointsEvenly(inputs, areaWidth, areaHeight);
                std::cout << "in:" << std::endl;
                pointsIn_ = (Point*)malloc((inputs) * sizeof(Point));
