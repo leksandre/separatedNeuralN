@@ -25,7 +25,7 @@ myNeuro::myNeuro()
     inputNeurons = n1;
     outputNeurons =n3;
 
-    nlCount = 4;//(!!!)укажи сколько слоев используешь, иначе нaвернется
+    nlCount = 2;//(!!!)укажи сколько слоев используешь, иначе нaвернется
 
     errLimit = errLimitG;
 
@@ -46,17 +46,19 @@ myNeuro::myNeuro()
     //list[1].setIO(n2, 40);
     //list[1].setIO(40, n3);
 
-    list[0].setIO(n1,n2);
-    list[1].setIO(n2,60);
-    list[2].setIO(60,30);
-    list[3].setIO(30,n3);
+    //list[0].setIO(n1,n2);
+    //list[1].setIO(n2,60);
+    //list[2].setIO(60,30);
+    //list[3].setIO(30,n3);
 
 //    list[0].setIO(n1, n2);
 //    list[1].setIO(n2, 30);
 //    list[2].setIO(30, n3);
 
- /*   list[0].setIO(n1 / 6, n2);
+    /*list[0].setIO(n1/2, n2);
     list[1].setIO(n2, n3);*/
+    list[0].setIO(80, 20);
+    list[1].setIO(20, 10);
 
 
 

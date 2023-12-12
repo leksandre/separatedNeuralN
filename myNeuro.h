@@ -263,7 +263,7 @@ public:
                std::vector<Point> pointsIn = {};
                std::vector<Point> pointsOut = {};
 
-               pointsIn = distributePointsEvenly(inputs, areaWidth, areaHeight);
+               pointsIn = distributePointsEvenly(inputs);
                std::cout << "in:" << std::endl;
                pointsIn_ = (Point*)malloc((inputs) * sizeof(Point));
 
@@ -277,7 +277,7 @@ public:
                    iPoints++;
                }
 
-               pointsOut = distributePointsEvenly(outputs, areaWidth, areaHeight);
+               pointsOut = distributePointsEvenly(outputs);
                std::cout << "out:" << std::endl;
                pointsOut_ = (Point*)malloc((outputs) * sizeof(Point));
 

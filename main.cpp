@@ -322,6 +322,9 @@ void drawLayer(double z, int iList)
 {
     Point * points = bb->list[iList].getInPoints();
     int pointsInCount = bb->list[iList].getInCount();
+    Point* pointsPrev = bb->list[iList].getOutPoints();
+    int pointsOutCount = bb->list[iList].getOutCount();
+    float ** weights = bb->list[iList].getMatrix();
 
     double x;
     double y;
@@ -350,11 +353,12 @@ void drawLayer(double z, int iList)
         glVertex3f(x, y, z);
         glEnd();
 
-        if((iList>0) & false){//идем на координаты точек на выходе предидущего слоя
-            Point * pointsPrev = bb->list[iList-1].getOutPoints();
-            int pointsOutCount = bb->list[iList-1].getOutCount();
-            double zP = z-zIncrement;
-            for(int j=0;j<=(pointsOutCount -1);j++) {
+        //if((pointsInCount < 100 )|| (rand() % 20 == 9) ){//идем на координаты точек на выходе предидущего слоя
+        //if( (rand() % 10 == 9) ){
+
+        if(1){
+            double zP = z+zIncrement;
+            for(int j=0;j<=(pointsOutCount-1);j++) {
                 double xP = pointsPrev[j].x;
                 double yP = pointsPrev[j].y;
                 glPointSize(3.0);
@@ -367,7 +371,7 @@ void drawLayer(double z, int iList)
                 glEnd();
             }
         }
-        i++;
+    
     }
 
 }
@@ -399,7 +403,7 @@ void displaynetwork_v2(void)
     double z = 0.0;
 
     //    drawLayer(z, pointsInCount, pointsW);
-    drawLayer(z, 0);
+    //drawLayer(z, 0);
 
     //std::cout << "\n z = " << z;;
     //std::cout << "\n bb->nlCount = "<< (bb->nlCount);;
@@ -409,7 +413,7 @@ void displaynetwork_v2(void)
 
         //std::cout << "\n i = " << i;;
 
-        z += zIncrement;
+        
 
         //std::cout << "\n z+inc = " << z;;
         //std::cout << "\n pointsW.size() = " << sizeof(pointsW);;
@@ -417,7 +421,7 @@ void displaynetwork_v2(void)
 
         //        drawLayer(z, pointsInCount, pointsW, true, pointsOutCount, pointsPrev);
         drawLayer(z, i);
-
+        z += zIncrement;
     }
 
 
