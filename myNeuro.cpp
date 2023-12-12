@@ -9,8 +9,8 @@ bool is_optimizedM;
 //switchers
 bool allow_optimisation_transform = false;
 //bool allow_optimisation_transform = false;
+//bool start_visualisation = false;
 bool start_visualisation = true;
-//bool start_visualisation = true;
 
 double areaWidth = 1000.0;
 double areaHeight = 1000.0;
@@ -57,10 +57,12 @@ myNeuro::myNeuro()
 
     /*list[0].setIO(n1/2, n2);
     list[1].setIO(n2, n3);*/
-    list[0].setIO(80, 20);
-    list[1].setIO(20, 10);
 
+   /* list[0].setIO(80, 20);
+    list[1].setIO(20, 10);*/
 
+    list[0].setIO(n1, n2);
+    list[1].setIO(n2, n3);
 
 //   std::cout<<"\n_________________________________ start myNeuro cpp myNeuro\n";;
 

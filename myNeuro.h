@@ -83,9 +83,9 @@ const int n1 = width * height; // = 784, without bias neuron
 const int n2 = 128;
 const int n3 = 10; // Ten classes: 0 - 9
 
-const float errLimitG = 0.005;
+const float errLimitG = 0.0005;
 
-const float errOptinizationLimitG = 0.001; //0.00003; //0.000001; //0.00003;
+const float errOptinizationLimitG = 0.0001; //0.00003; //0.000001; //0.00003;
 
 
 //for win!!
@@ -269,7 +269,7 @@ public:
 
                int iPoints = 0;
                for (const auto& point : pointsIn) {
-                   std::cout << "in X: " << point.x << ", Y: " << point.y << std::endl;
+                   //std::cout << "in X: " << point.x << ", Y: " << point.y << std::endl;
                    Point point_;
                    point_.x = point.x;
                    point_.y = point.y;
@@ -283,7 +283,7 @@ public:
 
                iPoints = 0;
                for (const auto& point : pointsOut) {
-                   std::cout << "out X: " << point.x << ", Y: " << point.y << std::endl;
+                   //std::cout << "out X: " << point.x << ", Y: " << point.y << std::endl;
                    Point point_;
                    point_.x = point.x;
                    point_.y = point.y;

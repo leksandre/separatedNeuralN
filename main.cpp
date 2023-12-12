@@ -33,7 +33,7 @@
     #include <time.h>
     //using namespace std;
 
-    bool flag = true;
+    bool flag_visualisation = true;
     GLfloat xRotated, yRotated, zRotated;
 #else
     //for linux
@@ -354,18 +354,24 @@ void drawLayer(double z, int iList)
         glEnd();
 
         //if((pointsInCount < 100 )|| (rand() % 20 == 9) ){//идем на координаты точек на выходе предидущего слоя
-        //if( (rand() % 10 == 9) ){
+        float colorLine = dead_transparency_line;
+        if ((rand() % 100 != 9)) {
+            colorLine = live_transparency_line;
+            continue;
+        }
 
         if(1){
             double zP = z+zIncrement;
             for(int j=0;j<=(pointsOutCount-1);j++) {
+                float w = weights[i][j];
+
                 double xP = pointsPrev[j].x;
                 double yP = pointsPrev[j].y;
                 glPointSize(3.0);
                 glColor4f(1.0, 1.0, 1.0, 0.95);
 
                 glBegin(GL_LINE_LOOP);
-                glColor4f(1.0, 1.0, 1.0, dead_transparency_line);
+                glColor4f(1.0, 1.0, 1.0, colorLine);
                 glVertex3f(x, y, z);
                 glVertex3f(xP, yP, zP);
                 glEnd();
@@ -426,7 +432,7 @@ void displaynetwork_v2(void)
 
 
 //
-//    if (flag == true)
+//    if (flag_visualisation == true)
 //    {
 //        //Inut image '1'
 //        glPointSize(15.0);
@@ -473,15 +479,15 @@ void changeViewPort(int w, int h)
 
 void check(int value)
 {
-    if (flag == true)
+    if (flag_visualisation == true)
     {
-        flag = false;
+        flag_visualisation = false;
     }
-    else if (flag == false)
+    else if (flag_visualisation == false)
     {
-        flag = true;
+        flag_visualisation = true;
     }
-    //cout << flag << "\n";
+    //cout << flag_visualisation << "\n";
     glutPostRedisplay();
     glutTimerFunc(100, check, 0);
 
@@ -715,7 +721,7 @@ void displaynetwork(void)
         }
     }
 
-    if (flag == true)
+    if (flag_visualisation == true)
     {
         //Inut image '1'
         glPointSize(15.0);
@@ -820,9 +826,18 @@ int main(int argc, char *argv[])
         glutIdleFunc(idlenetwork);
 
         //Let start glut loop
+        //glutTimerFunc(100, check, 0);
+        //glutMainLoop();
+        //return 0;
+        //
+    }
+
+
+    if (start_visualisation) {
+        //Let start glut loop
         glutTimerFunc(100, check, 0);
         glutMainLoop();
-        return 0;
+        //return 0;
         //
     }
 #endif
@@ -948,11 +963,13 @@ int main(int argc, char *argv[])
 //        for(int i=(bb->nlCount-2);i>=0;i--)
 //            errTmp[i] = e1;
 
+
+
         while (iCycle < nTrainingSimple and !is_optimizedM)
         //train until specified accuracy level
         {
             if(!is_optimizedM) iCycleTotal++;
-
+             //Sleep(500);
             float ** errors1 = bb->train(abc, tar1,allow_optimisation_transform);
 
 //            if(iCycle==0)
@@ -987,7 +1004,7 @@ int main(int argc, char *argv[])
 
             if(is_optimizedM)
             {
-                cout<<endl<<"_______________show_errors_______________\n"<<endl;
+                cout<<endl<<"_is_optimizedM______________show_errors_______________\n"<<endl;
 //                for(int i=(bb->nlCount-1);i>=0;i--) //skip "out" layer (nlCount-1) we could not modified it (a am too stupid for that)
                 for(int i=(bb->nlCount-2);i>=0;i--)
                 {
@@ -1118,7 +1135,7 @@ int main(int argc, char *argv[])
             float* target = new float[10];
             target[labelN] = 1;
             bb->train(binNumber, target,allow_optimisation_transform);
-
+            
             if (allow_optimisation_transform){
 
                 for(int i=(bb->nlCount-2);i>=0;i--){
@@ -1165,7 +1182,7 @@ int main(int argc, char *argv[])
 
     if(is_optimizedM)
     {
-        cout<<endl<<"_______________show_errors_______________\n"<<endl;
+        cout<<endl<<"_is_optimizedM______________show_errors_______________\n"<<endl;
        for(int i=(bb->nlCount-2);i>=0;i--)
         {
 
