@@ -357,7 +357,7 @@ void drawLayer(double z, int iList)
         float colorLine = dead_transparency_line;
         if ((rand() % 100 != 9)) {
             colorLine = live_transparency_line;
-            continue;
+            //continue;
         }
 
         if(1){
@@ -369,6 +369,12 @@ void drawLayer(double z, int iList)
                 double yP = pointsPrev[j].y;
                 glPointSize(3.0);
                 glColor4f(1.0, 1.0, 1.0, 0.95);
+
+                glBegin(GL_POINTS);
+                glVertex3f(xP, yP, zP);
+                glEnd();
+
+                glLineWidth(w);
 
                 glBegin(GL_LINE_LOOP);
                 glColor4f(1.0, 1.0, 1.0, colorLine);
@@ -777,34 +783,17 @@ void render()
 
 #endif
 
-int main(int argc, char *argv[])
+
+void visualise()
 {
 
-
-
-    //QCoreApplication a(argc, argv);
-//   std::cout<<"\n_________________________________ start main 0\n";;;
-    time_t start, end;
-    double time_taken;
-    time(&start);
-
-    
-    bb = new myNeuro();
-  
-    iCycleTotal = 0;
-    //    start_varian1 = false;
-    bool start_varian1 = true;
-
-
-    //Sleep(10000);
-
 #ifndef __APPLE__
-    if (start_visualisation) {
+   
         //for openGl visulaise
         //
 
         //Initialize GLUT
-        glutInit(&argc, argv);
+     
         //double buffering used to avoid flickering problem in animation
         glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 
@@ -830,258 +819,21 @@ int main(int argc, char *argv[])
         //glutMainLoop();
         //return 0;
         //
-    }
+    
 
 
-    if (start_visualisation) {
+
         //Let start glut loop
         glutTimerFunc(100, check, 0);
         glutMainLoop();
         //return 0;
         //
-    }
+
 #endif
 
+}
 
-
-
-
-
-
-
-
-
-    ////for openGl visulaise // empty window
-    ////
-    //glutInit(&argc, argv);  // Initialize GLUT
-    //glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);   // Set up some memory buffers for our display
-    //glutInitWindowSize(900, 700);  // Set the window size
-    //glutCreateWindow("Tactical_Hacker, GL");   // Create the window with the title "Tactical_Hacker,GL"
-    //glutReshapeFunc(changeViewPort);  // Bind the two functions (above) to respond when necessary
-    //glutDisplayFunc(render);
-    //// Very important!  This initializes the entry points in the OpenGL driver so we can call all the functions in the API.
-    //GLenum err = glewInit();
-    //if (GLEW_OK != err) {
-    //    fprintf(stderr, "GLEW error");
-    //    return 1;
-    //}
-    //glutMainLoop();
-    //return 0;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    if (start_varian1) {
-
-
-
-
-
-
-        //    return 0;
-        //myNeuro bb;
-             //----------------------------------INPUTS----GENERATOR-------------
-        //   std::cout<<"\n_________________________________ start main\n";;;
-                //qsrand((QTime::currentTime().second()));
-        float* abc = new float[n1];
-        for (int i = 0; i < n1; i++)
-        {
-            abc[i] = (rand() % 98) * 0.01 + 0.01;
-        }
-
-        float* cba = new float[n1];
-        for (int i = 0; i < n1; i++)
-        {
-            cba[i] = (rand() % 98) * 0.01 + 0.01;
-        }
-
-        //---------------------------------TARGETS----GENERATOR-------------
-        std::cout << "\n________________TARGETS----GENERATOR_________________\n";;
-        float* tar1 = new float[10];
-        tar1[0] = 0.01;
-        tar1[1] = 0.99;
-        tar1[2] = 0;
-        tar1[3] = 0;
-        tar1[4] = 0;
-        tar1[5] = 0;
-        tar1[6] = 0;
-        tar1[7] = 0;
-        tar1[8] = 0;
-        tar1[9] = 0;
-
-        float* tar2 = new float[10];
-        tar2[0] = 0.99;
-        tar2[1] = 0.01;
-        tar2[2] = 0;
-        tar2[3] = 0;
-        tar2[4] = 0;
-        tar2[5] = 0;
-        tar2[6] = 0;
-        tar2[7] = 0;
-        tar2[8] = 0;
-        tar2[9] = 0;
-
-        std::cout << "\n________________target1_________________\n";;
-        for (int out = 0; out < 10; out++) {
-            std::cout << "outputNeuron " + std::to_string(out) + ":";
-            std::cout << (tar1[out]) ;
-            std::cout << std::to_string(tar1[out]) + "\n";
-        }
-        std::cout << "\n________________target2_________________\n";;
-        for (int out = 0; out < 10; out++) {
-            std::cout << "outputNeuron " + std::to_string(out) + ":";
-            std::cout << (tar2[out]) ;
-            std::cout << std::to_string(tar2[out]) + "\n";
-        }
-
-        //--------------------------------NN---------WORKING---------------
-
-        std::cout << "\n___________________calculate_without_train_____________\n";;
-        bb->query(abc);
-        bb->query(cba);
-
-        std::cout << "\n________________start_train_________________\n";;
-        iCycle = 0;
-        int nTrainingSimple = 100000;
-
-
-
-
-//        float * e1;
-//        for(int i=(bb->nlCount-2);i>=0;i--)
-//            errTmp[i] = e1;
-
-
-
-        while (iCycle < nTrainingSimple and !is_optimizedM)
-        //train until specified accuracy level
-        {
-            if(!is_optimizedM) iCycleTotal++;
-             //Sleep(500);
-            float ** errors1 = bb->train(abc, tar1,allow_optimisation_transform);
-
-//            if(iCycle==0)
-//            for(int i=(bb->nlCount-2);i>=0;i--)
-//                errTmp[i] = bb->list[i].getErrors();
-
-//            for(int i=(bb->nlCount-2);i>=0;i--)
-//                errTmp[i] = bb->sumFloatMD(errTmp[i],bb->list[i].getErrors(),bb->list[i].getOutCount());
-
-
-            float ** errors2 = bb->train(cba, tar2,allow_optimisation_transform);
-
-//            for(int i=(bb->nlCount-2);i>=0;i--)
-//                errTmp[i] = bb->sumFloatMD(errTmp[i],bb->list[i].getErrors(),bb->list[i].getOutCount());
-
-
-//            for(int i=(bb->nlCount-2);i>=0;i--)
-//                errTmp[i] = bb->list[i].getErrors();
-
-
-//            for(int i=(bb->nlCount-2);i>=0;i--)
-//                errTmp[i] = bb->sumFloatMD(errTmp[i],bb->list[i].getErrors(),bb->list[i].getOutCount());
-
-            iCycle++;
-
-//            if(iCycle>1000)
-            if (allow_optimisation_transform){
-                for(int i=(bb->nlCount-2);i>=0;i--)
-                    bb->optimize_layer(i);
-            }
-
-
-            if(is_optimizedM)
-            {
-                cout<<endl<<"_is_optimizedM______________show_errors_______________\n"<<endl;
-//                for(int i=(bb->nlCount-1);i>=0;i--) //skip "out" layer (nlCount-1) we could not modified it (a am too stupid for that)
-                for(int i=(bb->nlCount-2);i>=0;i--)
-                {
-
-                    cout<<" layer :"+std::to_string(i)+" ";
-                    bb->printArray(bb->list[i].getErrors(),i, bb->list[i].getOutCount());
-                    std::cout<<"\n";
-
-                    cout<<" errTmp:"+std::to_string(i)+" ";
-                    bb->printArray(bb->list[i].errTmp,i, bb->list[i].getOutCount());
-                    std::cout<<"\n";
-//  just trash
-//                    bb->printArray(errors1[i],0,300);
-//                    bb->printArray(errors2[i],0,300);
-//                    for(int j=0;j<241;j++)
-//                    {
-//                        cout<<"\t"<<i<<":"<<j<<"\t"<<errors1[i][j];
-//                        if(errors1[i][j]!=0)maxN=j;
-//                    }
-//                    std::cout << "\nmaxN="<<maxN;
-//                    cout<<endl<<"\n______________________________\n"<<endl;
-
-
-                }
-            }
-
-
-
-        }
-
-
-        std::cout << "\n________________end_train_________________\n";;
-        std::cout << "\n___________________calculate_RESULT_____________\n";;
-        bb->query(abc);
-        std::cout << "______\n";;
-        bb->query(cba);
-
-
-        std::cout << "\n_______________THE____END_______________\n";;
-        //std::cout<<"\n_______________THE____END_______________\n";;
-
-         //return a.exec();
-
-
-
-    std::cout<<"\n______________________________\n";
-    std::cout<<"iCycle:"<<iCycle<<endl;
-    std::cout<<"iCycleTotal:"<<iCycleTotal<<endl;
-
-    time(&end);
-    // Calculating total time taken by the program.
-
-    time_taken = double(end - start);
-    std::cout << "Time taken by program is : " << time_taken << "";
-    std::cout << " sec " << "\n";
-
-
-    if (allow_optimisation_transform) {
-        bb->write_matrix_var1(model_fn_opt);
-    } else {
-        bb->write_matrix_var1(model_fn);
-    }
-
-
-    return 0;
-
-    }
-
-
-
-
-
-
-
-
-
-
+void simple2() {
 
 
 
@@ -1107,11 +859,11 @@ int main(int argc, char *argv[])
 
 
 
-    while(!is_optimizedM){
+    while (!is_optimizedM) {
         for (int sample = 1; sample <= nTraining; ++sample) {
 
-            if(!is_optimizedM)iCycle++;
-            if(is_optimizedM)continue;
+            if (!is_optimizedM)iCycle++;
+            if (is_optimizedM)continue;
             iCycleTotal++;
             ////cout << "Sample " << sample << endl;
             //// Getting (image, label)
@@ -1126,7 +878,7 @@ int main(int argc, char *argv[])
             float* binNumber = new float[n1];
             for (int i = 0; i < n1; i++)
             {
-                binNumber[i] =out1[i];
+                binNumber[i] = out1[i];
 
             }
 
@@ -1134,13 +886,13 @@ int main(int argc, char *argv[])
 
             float* target = new float[10];
             target[labelN] = 1;
-            bb->train(binNumber, target,allow_optimisation_transform);
-            
-            if (allow_optimisation_transform){
+            bb->train(binNumber, target, allow_optimisation_transform);
 
-                for(int i=(bb->nlCount-2);i>=0;i--){
+            if (allow_optimisation_transform) {
 
-                   // errTmp[i] = bb->sumFloatMD(errTmp[i],bb->list[i].getErrors(),bb->list[i].getOutCount());
+                for (int i = (bb->nlCount - 2); i >= 0; i--) {
+
+                    // errTmp[i] = bb->sumFloatMD(errTmp[i],bb->list[i].getErrors(),bb->list[i].getOutCount());
                     bb->optimize_layer(i);
                 }
             }
@@ -1180,15 +932,15 @@ int main(int argc, char *argv[])
 
 
 
-    if(is_optimizedM)
+    if (is_optimizedM)
     {
-        cout<<endl<<"_is_optimizedM______________show_errors_______________\n"<<endl;
-       for(int i=(bb->nlCount-2);i>=0;i--)
+        cout << endl << "_is_optimizedM______________show_errors_______________\n" << endl;
+        for (int i = (bb->nlCount - 2); i >= 0; i--)
         {
 
-            cout<<" layer :"+std::to_string(i)+" ";
-            bb->printArray(bb->list[i].getErrors(),i, bb->list[i].getOutCount());
-            std::cout<<"\n";
+            cout << " layer :" + std::to_string(i) + " ";
+            bb->printArray(bb->list[i].getErrors(), i, bb->list[i].getOutCount());
+            std::cout << "\n";
 
             if (allow_optimisation_transform) {
                 cout << " errTmp:" + std::to_string(i) + " ";
@@ -1222,9 +974,9 @@ int main(int argc, char *argv[])
         bb->query(binNumber);
     }
 
-    std::cout<<"\n______________________________\n";
-    std::cout<<"iCycle:"<<iCycle<<endl;
-    std::cout<<"iCycleTotal:"<<iCycleTotal<<endl;
+    std::cout << "\n______________________________\n";
+    std::cout << "iCycle:" << iCycle << endl;
+    std::cout << "iCycleTotal:" << iCycleTotal << endl;
 
     // Save the final network
     write_matrix(model_fn);
@@ -1243,6 +995,217 @@ int main(int argc, char *argv[])
 
 
 
+}
+    
+void simple1() {
+
+
+
+    //    return 0;
+    //myNeuro bb;
+         //----------------------------------INPUTS----GENERATOR-------------
+    //   std::cout<<"\n_________________________________ start main\n";;;
+            //qsrand((QTime::currentTime().second()));
+    float* abc = new float[n1];
+    for (int i = 0; i < n1; i++)
+    {
+        abc[i] = (rand() % 98) * 0.01 + 0.01;
+    }
+
+    float* cba = new float[n1];
+    for (int i = 0; i < n1; i++)
+    {
+        cba[i] = (rand() % 98) * 0.01 + 0.01;
+    }
+
+    //---------------------------------TARGETS----GENERATOR-------------
+    std::cout << "\n________________TARGETS----GENERATOR_________________\n";;
+    float* tar1 = new float[10];
+    tar1[0] = 0.01;
+    tar1[1] = 0.99;
+    tar1[2] = 0;
+    tar1[3] = 0;
+    tar1[4] = 0;
+    tar1[5] = 0;
+    tar1[6] = 0;
+    tar1[7] = 0;
+    tar1[8] = 0;
+    tar1[9] = 0;
+
+    float* tar2 = new float[10];
+    tar2[0] = 0.99;
+    tar2[1] = 0.01;
+    tar2[2] = 0;
+    tar2[3] = 0;
+    tar2[4] = 0;
+    tar2[5] = 0;
+    tar2[6] = 0;
+    tar2[7] = 0;
+    tar2[8] = 0;
+    tar2[9] = 0;
+
+    std::cout << "\n________________target1_________________\n";;
+    for (int out = 0; out < 10; out++) {
+        std::cout << "outputNeuron " + std::to_string(out) + ":";
+        std::cout << (tar1[out]);
+        std::cout << std::to_string(tar1[out]) + "\n";
+    }
+    std::cout << "\n________________target2_________________\n";;
+    for (int out = 0; out < 10; out++) {
+        std::cout << "outputNeuron " + std::to_string(out) + ":";
+        std::cout << (tar2[out]);
+        std::cout << std::to_string(tar2[out]) + "\n";
+    }
+
+    //--------------------------------NN---------WORKING---------------
+
+    std::cout << "\n___________________calculate_without_train_____________\n";;
+    bb->query(abc);
+    bb->query(cba);
+
+    std::cout << "\n________________start_train_________________\n";;
+    iCycle = 0;
+    int nTrainingSimple = 100000;
+
+
+
+
+    //        float * e1;
+    //        for(int i=(bb->nlCount-2);i>=0;i--)
+    //            errTmp[i] = e1;
+
+
+
+    while (iCycle < nTrainingSimple and !is_optimizedM)
+        //train until specified accuracy level
+    {
+        if (!is_optimizedM) iCycleTotal++;
+        //Sleep(500);
+        float** errors1 = bb->train(abc, tar1, allow_optimisation_transform);
+
+        //            if(iCycle==0)
+        //            for(int i=(bb->nlCount-2);i>=0;i--)
+        //                errTmp[i] = bb->list[i].getErrors();
+
+        //            for(int i=(bb->nlCount-2);i>=0;i--)
+        //                errTmp[i] = bb->sumFloatMD(errTmp[i],bb->list[i].getErrors(),bb->list[i].getOutCount());
+
+
+        float** errors2 = bb->train(cba, tar2, allow_optimisation_transform);
+
+        //            for(int i=(bb->nlCount-2);i>=0;i--)
+        //                errTmp[i] = bb->sumFloatMD(errTmp[i],bb->list[i].getErrors(),bb->list[i].getOutCount());
+
+
+        //            for(int i=(bb->nlCount-2);i>=0;i--)
+        //                errTmp[i] = bb->list[i].getErrors();
+
+
+        //            for(int i=(bb->nlCount-2);i>=0;i--)
+        //                errTmp[i] = bb->sumFloatMD(errTmp[i],bb->list[i].getErrors(),bb->list[i].getOutCount());
+
+        iCycle++;
+
+        //            if(iCycle>1000)
+        if (allow_optimisation_transform) {
+            for (int i = (bb->nlCount - 2); i >= 0; i--)
+                bb->optimize_layer(i);
+        }
+
+
+        if (is_optimizedM)
+        {
+            cout << endl << "_is_optimizedM______________show_errors_______________\n" << endl;
+            //                for(int i=(bb->nlCount-1);i>=0;i--) //skip "out" layer (nlCount-1) we could not modified it (a am too stupid for that)
+            for (int i = (bb->nlCount - 2); i >= 0; i--)
+            {
+
+                cout << " layer :" + std::to_string(i) + " ";
+                bb->printArray(bb->list[i].getErrors(), i, bb->list[i].getOutCount());
+                std::cout << "\n";
+
+                cout << " errTmp:" + std::to_string(i) + " ";
+                bb->printArray(bb->list[i].errTmp, i, bb->list[i].getOutCount());
+                std::cout << "\n";
+                //  just trash
+                //                    bb->printArray(errors1[i],0,300);
+                //                    bb->printArray(errors2[i],0,300);
+                //                    for(int j=0;j<241;j++)
+                //                    {
+                //                        cout<<"\t"<<i<<":"<<j<<"\t"<<errors1[i][j];
+                //                        if(errors1[i][j]!=0)maxN=j;
+                //                    }
+                //                    std::cout << "\nmaxN="<<maxN;
+                //                    cout<<endl<<"\n______________________________\n"<<endl;
+
+
+            }
+        }
+
+
+
+    }
+
+
+    std::cout << "\n________________end_train_________________\n";;
+    std::cout << "\n___________________calculate_RESULT_____________\n";;
+    bb->query(abc);
+    std::cout << "______\n";;
+    bb->query(cba);
+
+
+    std::cout << "\n_______________THE____END_______________\n";;
+    //std::cout<<"\n_______________THE____END_______________\n";;
+
+     //return a.exec();
+
+
+
+    std::cout << "\n______________________________\n";
+    std::cout << "iCycle:" << iCycle << endl;
+    std::cout << "iCycleTotal:" << iCycleTotal << endl;
+
+
+
+    if (allow_optimisation_transform) {
+        bb->write_matrix_var1(model_fn_opt);
+    }
+    else {
+        bb->write_matrix_var1(model_fn);
+    }
+
+}
+
+
+int main(int argc, char *argv[])
+{
+
+
+    bb = new myNeuro();
+    
+
+
+
+    //QCoreApplication a(argc, argv);
+//   std::cout<<"\n_________________________________ start main 0\n";;;
+    time_t start, end;
+    double time_taken;
+    time(&start);
+
+    
+ 
+  
+    iCycleTotal = 0;
+    bool start_varian1 = true;
+
+    if (start_varian1) {
+        simple1();
+    }
+    else {
+        simple2();
+    }
+
+
 
 
 
@@ -1253,5 +1216,32 @@ int main(int argc, char *argv[])
     std::cout << "Time taken by program is : " << time_taken << "";
     std::cout << " sec " << "\n";
 
+
+    if (start_visualisation) {
+        glutInit(&argc, argv);
+        visualise();
+    }
+
+
     return 0;
 }
+
+
+
+//Sleep(10000);
+////for openGl visulaise // empty window
+////
+//glutInit(&argc, argv);  // Initialize GLUT
+//glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);   // Set up some memory buffers for our display
+//glutInitWindowSize(900, 700);  // Set the window size
+//glutCreateWindow("Tactical_Hacker, GL");   // Create the window with the title "Tactical_Hacker,GL"
+//glutReshapeFunc(changeViewPort);  // Bind the two functions (above) to respond when necessary
+//glutDisplayFunc(render);
+//// Very important!  This initializes the entry points in the OpenGL driver so we can call all the functions in the API.
+//GLenum err = glewInit();
+//if (GLEW_OK != err) {
+//    fprintf(stderr, "GLEW error");
+//    return 1;
+//}
+//glutMainLoop();
+//return 0;

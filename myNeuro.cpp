@@ -7,8 +7,8 @@
 bool is_optimizedM;
 
 //switchers
-bool allow_optimisation_transform = false;
 //bool allow_optimisation_transform = false;
+bool allow_optimisation_transform = true;
 //bool start_visualisation = false;
 bool start_visualisation = true;
 
@@ -37,10 +37,10 @@ myNeuro::myNeuro()
     inputs = (float*) malloc((inputNeurons)*sizeof(float));
     targets = (float*) malloc((outputNeurons)*sizeof(float));
 
-//    list[0].setIO(100,20);
-//    list[1].setIO(20,6);
-//    list[2].setIO(6,3);
-//    list[3].setIO(3,2);
+    //list[0].setIO(100,20);
+    //list[1].setIO(20,6);
+    //list[2].setIO(6,3);
+    //list[3].setIO(3,2);
 
     //list[0].setIO(n1, n2);
     //list[1].setIO(n2, 40);
@@ -55,8 +55,8 @@ myNeuro::myNeuro()
 //    list[1].setIO(n2, 30);
 //    list[2].setIO(30, n3);
 
-    /*list[0].setIO(n1/2, n2);
-    list[1].setIO(n2, n3);*/
+    //list[0].setIO(n1, 1);
+    //list[1].setIO(1, n3);
 
    /* list[0].setIO(80, 20);
     list[1].setIO(20, 10);*/
@@ -161,7 +161,7 @@ float* myNeuro::processErrors(int i, bool & startOptimisation, bool showError = 
 
         std::cout<<"\n";
         //if(list[i].is_optimizedL )std::cout<<"\n_________________________________\n";
-        std::cout<<" layer:"+std::to_string(i)+" ";
+        std::cout<<" -layer:"+std::to_string(i)+" ("+std::to_string(lenLayer)+") ";
         printArray(list[i].getErrors(),i, lenLayer);
         //if(list[i].is_optimizedL )std::cout<<"\n_________________________________\n";
         std::cout<<"\n";
@@ -277,6 +277,8 @@ void myNeuro::optimize_layer(int inS){
 if(rand()%100==9 )
     for(int inp =0; inp < countOut; inp++)
     {
+      //if (rand() % 1000 == 9)
+      //  std::cout << "truncMatrix layer:" << inS << " neuron:" << inp << " neuron val:" << list[inS].errTmp[inp] << "  countOut:" << countOut << "\n";;
         if(absF(list[inS].errTmp[inp])>1){
             std::cout<<"truncMatrix layer:"<< inS <<" neuron:"<< inp  <<" neuron val:"<< list[inS].errTmp[inp]  <<"  countOut:"<< countOut <<"\n";;
             list[inS].truncMatrixOut(inp);
