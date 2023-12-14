@@ -260,11 +260,24 @@ void write_matrix(string file_name) {
 
 
 
+int getVersion() {
+    if (__cplusplus == 202101L) std::cout << "C++23";
+    else if (__cplusplus == 202002L) std::cout << "C++20";
+    else if (__cplusplus == 201703L) std::cout << "C++17";
+    else if (__cplusplus == 201402L) std::cout << "C++14";
+    else if (__cplusplus == 201103L) std::cout << "C++11";
+    else if (__cplusplus == 199711L) std::cout << "C++98";
+    else std::cout << "pre-standard C++." << __cplusplus;
+    std::cout << "\n";
+}
 
 
 
 int main(int argc, char *argv[])
 {
+
+    getVersion();
+
     //QCoreApplication a(argc, argv);
 //   std::cout<<"\n_________________________________ start main 0\n";;;
     time_t start, end;
@@ -275,7 +288,7 @@ int main(int argc, char *argv[])
     myNeuro* bb = new myNeuro();
     iCycleTotal = 0;
 //    start_varian1 = false;
-    bool start_varian1 = true;
+    bool start_varian1 = false;
 
 
     if (start_varian1) {

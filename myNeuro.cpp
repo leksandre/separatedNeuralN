@@ -7,8 +7,8 @@
 bool is_optimizedM;
 
 //switcher
-bool allow_optimisation_transform = false;
 //bool allow_optimisation_transform = false;
+bool allow_optimisation_transform = true;
 
 int iCycle;
 int iCycleTotal;
@@ -172,7 +172,7 @@ float* myNeuro::processErrors(int i, bool & startOptimisation, bool showError = 
 }
 
 float ** myNeuro::backPropagate()
-{   
+{
     //   std::cout<<"\n_________________________________ start myNeuro cpp backPropagate\n";;
     //-------------------------------ERRORS-----CALC---------
     bool showError = false;
@@ -264,7 +264,7 @@ void myNeuro::sumFloatMD(int inS)
 void myNeuro::optimize_layer(int inS){
     int countOut = list[inS].getOutCount();
 //    int countIn = list[i].getInCount();
-if(rand()%100==9 )
+if(rand()%10==9 )
     for(int inp =0; inp < countOut; inp++)
     {
         if(absF(list[inS].errTmp[inp])>1){
