@@ -7,10 +7,13 @@
 bool is_optimizedM;
 
 //switchers
-//bool allow_optimisation_transform = false;
-bool allow_optimisation_transform = true;
+bool allow_optimisation_transform = false;
+//bool allow_optimisation_transform = true;
 //bool start_visualisation = false;
 bool start_visualisation = true;
+
+//bool allow_truncate_for_example = false;
+bool allow_truncate_for_example = true;
 
 double areaWidth = 1000.0;
 double areaHeight = 1000.0;

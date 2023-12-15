@@ -493,9 +493,24 @@ void check(int value)
     {
         flag_visualisation = true;
     }
-    //cout << flag_visualisation << "\n";
+    //cout << "allow_truncate_for_example: " << allow_truncate_for_example << "\n";
+    int inS = 1; // get layer where 128 heurons
+    if (allow_truncate_for_example) {
+        if(bb->list[inS].getInCount()>2)
+        if (rand() % 3 == 2) {
+            int inp = (rand() % (bb->list[inS].getInCount()));
+            cout << "truncate: " << inp << "\n";
+            bb->list[inS-1].truncMatrixOut(inp);
+            bb->list[inS].truncMatrixIn(inp);
+
+        }
+    }
+
+
+    //
     glutPostRedisplay();
     glutTimerFunc(100, check, 0);
+
 
 }
 

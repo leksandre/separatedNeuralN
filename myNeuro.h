@@ -9,6 +9,7 @@ extern bool allow_optimisation_transform;
 extern double areaWidth;
 extern double areaHeight;
 extern bool start_visualisation;
+extern bool allow_truncate_for_example;
 extern int iCycle;
 extern int iCycleTotal;
 
@@ -58,7 +59,7 @@ using namespace std;
 
 //#include <cmath>// does not need
 
-// Training image file name
+// Training image File name
 const string training_image_fn = "C:\\mnist\\train-images.idx3-ubyte";//win
 //const string training_image_fn = "mnist/train-images.idx3-ubyte";//lin
 
